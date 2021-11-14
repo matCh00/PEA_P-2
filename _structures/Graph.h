@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <ctime>
 #include <random>
 #include <time.h>
 #include <fstream>
@@ -17,7 +18,7 @@
 #include <queue>
 #include <numeric>
 #include "../_extra/Randomize.h"
-#include "../_extra/Time.h"
+#include "../_extra/Timer.h"
 
 using namespace std;
 

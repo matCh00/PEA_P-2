@@ -1,27 +1,27 @@
-#include "Time.h"
+#include "Timer.h"
 
 
 
-Time::Time() {
-
-}
-
-
-
-Time::~Time() {
+Timer::Timer() {
 
 }
 
 
 
-void Time::start() {
+Timer::~Timer() {
+
+}
+
+
+
+void Timer::start() {
 
     tstart = steady_clock::now();
 }
 
 
 
-void Time::stop() {
+void Timer::stop() {
 
     tstop = steady_clock::now();
     measurement = tstop - tstart;
@@ -29,7 +29,7 @@ void Time::stop() {
 
 
 
-double Time::read() {
+double Timer::read() {
 
     return measurement.count();
 }

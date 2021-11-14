@@ -1,7 +1,7 @@
 // mierzenie czasu w algorytmach
 
-#ifndef PEA_P_2_TIME_H
-#define PEA_P_2_TIME_H
+#ifndef PEA_P_2_TIMER_H
+#define PEA_P_2_TIMER_H
 
 #include <chrono>
 #include <iostream>
@@ -10,7 +10,7 @@ using namespace std;
 using namespace chrono;
 
 
-class Time {
+class Timer {
 
 private:
 
@@ -26,10 +26,10 @@ private:
 public:
 
     // konstruktor
-    Time();
+    Timer();
 
     // destruktor
-    ~Time();
+    ~Timer();
 
     // początek pomiaru
     void start();

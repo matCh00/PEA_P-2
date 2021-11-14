@@ -162,7 +162,7 @@ void TabuSearch::algorithmTabuSearch(int matrixSize, int **TSPMatrix) {
     bestRoute = route;
     vector < unsigned > currentRoute = bestRoute;
 
-    Time onboardClock;
+    Timer onboardClock;
 
     onboardClock.start();
 

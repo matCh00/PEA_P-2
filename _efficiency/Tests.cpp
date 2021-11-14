@@ -35,7 +35,7 @@ void Tests::startTests() {
 
 
 
-    cout << "podaj liczbe miast:  ,  podaj liczbe powtorzen:  ,  wybierz: [1] - TS,  [2] - SA;
+    cout << "podaj liczbe miast:  ,  podaj liczbe powtorzen:  ,  wybierz: [1] - TS,  [2] - SA";
     cin >> instanceSize; cin >> reps; cin >> alg;
 
 
@@ -53,7 +53,7 @@ void Tests::startTests() {
                 QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
                 start = read_QPC();
 
-                bf->algorithmBruteForce(graph->getMatrix(), path);
+
 
                 elapsed = read_QPC() - start;
                 sum += (1000000.0 * elapsed) / frequency;
@@ -67,7 +67,7 @@ void Tests::startTests() {
                 QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
                 start = read_QPC();
 
-                bb->algorithmBranchAndBound(graph->getMatrix(), path);
+
 
                 elapsed = read_QPC() - start;
                 sum += (1000000.0 * elapsed) / frequency;
@@ -82,7 +82,7 @@ void Tests::startTests() {
         cout << "[x] - wyjscie,  [1] - dalej"; cin >> key;
         if (key == 1) {
 
-            cout << "podaj liczbe miast:  ,  podaj liczbe powtorzen:  ,  wybierz: [1] - TS,  [2] - SA;
+            cout << "podaj liczbe miast:  ,  podaj liczbe powtorzen:  ,  wybierz: [1] - TS,  [2] - SA";
             cin >> instanceSize; cin >> reps; cin >> alg;
         }
     }
