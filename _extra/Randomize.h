@@ -1,4 +1,4 @@
-// funkcje losujące
+// funkcje losujące (niepotrzebne dla przeszukiwania lokalnego)
 
 #ifndef PEA_P_1_RANDOMIZE_H
 #define PEA_P_1_RANDOMIZE_H

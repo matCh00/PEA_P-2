@@ -31,8 +31,7 @@ void Menu::startMenu() {
     while (run) {
 
         cout << "\n [1] - wczytaj dane z pliku \n"
-                " [2] - generuj losowy graf \n"
-                " [3] - wyswietl graf \n"
+                " [2] - wyswietl graf \n"
                 "  [4] - algorytm TS - tabu search \n"
                 "  [5] - algorytm SA - symulowane wyzarzanie \n"
                 " [9] - badanie efektywnosci \n"
@@ -47,12 +46,6 @@ void Menu::startMenu() {
                 cout << "podaj nazwe pliku: ";
                 cin >> name;
                 graph = new Graph(name);
-                break;
-
-            case 2:
-                cout << "podaj ilosc miast: ";
-                cin >> cities;
-                graph = new Graph(cities);
                 break;
 
             case 3:
