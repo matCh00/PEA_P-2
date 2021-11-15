@@ -20,8 +20,6 @@ void Menu::startMenu() {
     int key;
     bool run = true;
     string name;
-    int cities;
-    long long int frequency, start, elapsed;
 
 
     // instancja grafu
@@ -43,12 +41,12 @@ void Menu::startMenu() {
         switch (key) {
 
             case 1:
-                cout << "podaj nazwe pliku: ";
+                cout << "podaj nazwe pliku: ";      // C:\Users\matic\Desktop\br17.atsp
                 cin >> name;
                 graph = new Graph(name);
                 break;
 
-            case 3:
+            case 2:
                 cout << "graf w postaci macierzy sasiedztwa: \n";
                 graph->display();
                 break;
@@ -61,21 +59,22 @@ void Menu::startMenu() {
                     int iterTab[1] = { 5000 };//limit iteracji bez poprawy, po osiagnieciu ktorego jest generowana nowa sciezka
                     int divCadTab[1] = {9}; //dzielnik kadencji (intensyfikacja) w przypadku znalezienia globalnie najlepszego rozwiazania
                     int randNodesTab[1] = { 5 };//liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
-                    int typesTab[1] = {1};//rodzaj sasiedztwa
+                    int typesTab[1] = {0};//rodzaj sasiedztwa
 
                     TabuSearch *ts = new TabuSearch();
 
-                    int* path = new int[graph->getSize() + 1];
+                    vector<unsigned int> path;
+                    path.resize(graph->getSize() + 1);
                     int cost;
 
-                    ts->setSettingsTabu(cadenceTab[0], timeTab[0], iterTab[0], divCadTab[0], randNodesTab[0], typesTab[0]);
-                    cost = ts->algorithmTabuSearch(graph->getMatrix());
+                    ts->settingsTabuSearch(cadenceTab[0], timeTab[0], iterTab[0], divCadTab[0], randNodesTab[0], typesTab[0]);
+                    cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
 
                     cout << "Koszt: " << cost << endl;
-//                    cout << "Sciezka: " ;
-//                    for (int i = 0; i < graph->getSize(); i++)
-//                        cout << path[i] << " -> ";
-//                    cout << path[graph->getSize()];
+                    cout << "Sciezka: " ;
+                    for (int i = 0; i < graph->getSize(); i++)
+                        cout << path[i] << " -> ";
+                    cout << path[graph->getSize()] << endl;
 
                     break;
                 }
@@ -99,6 +98,7 @@ void Menu::startMenu() {
 //                        cout << path[i] << " -> ";
 //                    cout << path[graph->getSize()];
 
+                    delete[] path;
                     break;
                 }
                 else {

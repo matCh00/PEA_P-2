@@ -1,4 +1,4 @@
-// funkcje losujące (niepotrzebne dla przeszukiwania lokalnego)
+// funkcje losujące
 
 #ifndef PEA_P_1_RANDOMIZE_H
 #define PEA_P_1_RANDOMIZE_H
@@ -15,6 +15,10 @@ public:
 
     // ze stackoverflow.com
     static int random_mt19937(int min, int max);
+
+
+    // z cppreference.com
+    static int random_engine(int min, int max);
 };
 
 
