@@ -39,10 +39,10 @@ private:
     int matrixSize;
 
     // globalnie optymalna ścieżka
-    vector <unsigned int>bestRoute;
+    vector<unsigned int> bestRoute;
 
     // aktualna ścieżka
-    vector <unsigned int>currentRoute;
+    vector<unsigned int> currentRoute;
 
     // globalna funkcja celu
     int globalOptimum;
@@ -56,32 +56,36 @@ private:
     // lista ostatnio wykonanych ruchów
     vector<vector<unsigned int>> tabuList;
 
-    // generowanie początkowej ścieżki - algorytm zachłanny
-    // nie dokonuje oceny czy w kolejnych krokach jest sens wykonywać dane działanie
+    // generowanie początkowej ścieżki i zwrócenie lokalnego minimum
+    // algorytm zachłanny nie dokonuje oceny czy w kolejnych krokach jest sens wykonywać dane działanie
     // dokonuje decyzji lokalnie optymalnej, kontynuując rozwiązanie podproblemu wynikającego z podjętej decyzji
-    int getInitialGreedy(vector < unsigned >&route);
-    int getInitialGreedyAndRandom(vector < unsigned >&route);
+    int getInitialGreedy(vector<unsigned> &route);
+
+    // generowanie ścieżki i zwrócenie lokalnego minimum
+    int getInitialGreedyAndRandom(vector<unsigned> &route);
+
+    // wyczyszczenie listy tabu
     void cleanTabuList();
 
     // przeszukiwanie sąsiedztwa
     // odwrócenie kolejnosci między wierzchołkami   reverse(4,1): <0,3,4,2,5,1,0> -> <0,3,1,5,2,4,0>
-    int getBestNeighborhoodReverse(int &bestI, int &bestJ, vector <unsigned> currentRoute);
+    int getBestNeighborhoodReverse(int &bestI, int &bestJ, vector<unsigned> &currentRoute);
 
     // odwrócenie kolejności
-    void reverseVector(int a, int b, vector <unsigned>& currentRoute);
+    void reverseVector(int a, int b, vector<unsigned> &currentRoute);
 
     // sprawdzenie kosztu
-    int calculateReverse(int i, int j, vector <unsigned> currentRoute);
+    int calculateReverse(int i, int j, vector<unsigned> &currentRoute);
 
     // przeszukiwanie sąsiedztwa
     // zamiana miejscami wierzchołków   swap(4,1): <0,3,4,2,5,1,0> -> <0,3,1,2,5,4,0>
-    int getBestNeighborhoodSwap(int &bestI, int &bestJ, vector <unsigned> currentRoute);
+    int getBestNeighborhoodSwap(int &bestI, int &bestJ, vector<unsigned> &currentRoute);
 
     // zamiana miejscami
-    void swapVector(int a, int b, vector <unsigned>& currentRoute);
+    void swapVector(int a, int b, vector<unsigned> &currentRoute);
 
     // sprawdzenie kosztu
-    int calculateSwap(int i, int j, vector <unsigned> currentRoute);
+    int calculateSwap(int i, int j, vector<unsigned> &currentRoute);
 
 
 public:
@@ -97,7 +101,7 @@ public:
     int algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
 
     // ustawienia Tabu Search
-    void settingsTabuSearch(int a, int b, int c, int d, int e, int g);
+    void settingsTabuSearch(int cadence, int stopTime, int iterations, int cadenceDivider, int nodesAmount, int neighborhoodType);
 };
 
 

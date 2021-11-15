@@ -13,7 +13,7 @@ TabuSearch::~TabuSearch() {
 }
 
 
-
+// TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
 void TabuSearch::settingsTabuSearch(int cadence, int stopTime, int iterations, int cadenceDivider, int nodesAmount, int neighborhoodType) {
 
     this->cadence = cadence;
@@ -30,10 +30,7 @@ int TabuSearch::getInitialGreedy(vector<unsigned> &bestTab) {
 
     int localMin = 0;
     int bestMin, tempBest = 0, oldTempBest = 0;
-    int *visitedTab = new int[matrixSize];
-    for (int i = 0; i < matrixSize; i++) {
-        visitedTab[i] = 0;
-    }
+    vector<int> visitedTab(matrixSize, 0);
 
     vector<vector<int>> macierz;
     macierz = matrix;
@@ -68,8 +65,7 @@ int TabuSearch::getInitialGreedy(vector<unsigned> &bestTab) {
     bestTab.push_back(0);
 
     macierz.clear();
-
-    delete[]visitedTab;
+    visitedTab.clear();
 
     return localMin;
 }
@@ -82,10 +78,7 @@ int TabuSearch::getInitialGreedyAndRandom(vector<unsigned> &bestTab) {
 
     int bestMin, tempBest = 0, oldTempBest = 0;
     int localMin = 0;
-    int *visitedTab = new int[matrixSize];
-    for (int i = 0; i < matrixSize; i++) {
-        visitedTab[i] = 0;
-    }
+    vector<int> visitedTab(matrixSize, 0);
     vector<vector<int>> macierz;
     macierz = matrix;
 
@@ -138,6 +131,7 @@ int TabuSearch::getInitialGreedyAndRandom(vector<unsigned> &bestTab) {
     bestTab.push_back(0);
 
     macierz.clear();
+    visitedTab.clear();
 
     return localMin;
 }
@@ -151,7 +145,8 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
     matrix = originalMatrix;
     globalOptimum = INT_MAX;
     int greedyStart = 1;
-    int xxx = 0;
+
+    int xxx = 0;/////////
 
     // rezerwacja miejsca
     bestRoute.resize(matrixSize + 1);
@@ -285,7 +280,7 @@ void TabuSearch::cleanTabuList() {
 
 
 
-int TabuSearch::getBestNeighborhoodReverse(int &bestI, int &bestJ, vector<unsigned> currentRoute) {
+int TabuSearch::getBestNeighborhoodReverse(int &bestI, int &bestJ, vector<unsigned> &currentRoute) {
 
     int bestBalance = INT_MAX;
     int balance;
@@ -335,7 +330,7 @@ void TabuSearch::reverseVector(int a, int b, vector<unsigned> &currentRoute) {
 
 
 
-int TabuSearch::calculateReverse(int i, int j, vector<unsigned> currentRoute) {
+int TabuSearch::calculateReverse(int i, int j, vector<unsigned> &currentRoute) {
 
     int balance;
     balance = 0 - matrix[currentRoute.at(i - 1)][currentRoute.at(i)] - matrix[currentRoute.at(j)][currentRoute.at(j + 1)];
@@ -349,7 +344,7 @@ int TabuSearch::calculateReverse(int i, int j, vector<unsigned> currentRoute) {
 
 
 
-int TabuSearch::getBestNeighborhoodSwap(int &bestI, int &bestJ, vector<unsigned> currentRoute) {
+int TabuSearch::getBestNeighborhoodSwap(int &bestI, int &bestJ, vector<unsigned> &currentRoute) {
 
     int bestBalance = INT_MAX;
     int balance;
@@ -402,7 +397,7 @@ void TabuSearch::swapVector(int a, int b, vector<unsigned> &currentRoute) {
 
 
 
-int TabuSearch::calculateSwap(int i, int j, vector<unsigned> currentRoute) {
+int TabuSearch::calculateSwap(int i, int j, vector<unsigned> &currentRoute) {
 
     int balance;
     if (i + 1 == j) {
