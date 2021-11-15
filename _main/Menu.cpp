@@ -54,28 +54,56 @@ void Menu::startMenu() {
             case 4:
                 if (graph != nullptr) {
 
-                    int cadenceTab[1] = { 120 }; //kadencja
-                    int timeTab[1] = { 2 };//czas wykonania algorytmu
-                    int iterTab[1] = { 5000 };//limit iteracji bez poprawy, po osiagnieciu ktorego jest generowana nowa sciezka
-                    int divCadTab[1] = {9}; //dzielnik kadencji (intensyfikacja) w przypadku znalezienia globalnie najlepszego rozwiazania
-                    int randNodesTab[1] = { 5 };//liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
-                    int typesTab[1] = {0};//rodzaj sasiedztwa
+                    int cadence = 120 ; // kadencja
+                    int time = 2 ;      // czas wykonania
+                    int iter = 5000 ;   // limit iteracji bez poprawy
+                    int divCad = 9;     // dzielnik kadencji (intensyfikacja)
+                    int randNodes = 5 ; // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
+                    int types = 0;      // rodzaj sasiedztwa
+                    int choose;
+                    bool loop = true;
 
-                    TabuSearch *ts = new TabuSearch();
+                    while (loop) {
 
-                    vector<unsigned int> path;
-                    path.resize(graph->getSize() + 1);
-                    int cost;
+                        cout << " [1] - ustaw parametry\n"
+                                " [2] - rozpocznij algorytm\n"
+                                " [0] - wyjdz\n" << endl;
+                        cin >> choose;
 
-                    ts->settingsTabuSearch(cadenceTab[0], timeTab[0], iterTab[0], divCadTab[0], randNodesTab[0], typesTab[0]);
-                    cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
+                        if (choose == 0) {
 
-                    cout << "Koszt: " << cost << endl;
-                    cout << "Sciezka: " ;
-                    for (int i = 0; i < graph->getSize(); i++)
-                        cout << path[i] << " -> ";
-                    cout << path[graph->getSize()] << endl;
+                            loop = false;
+                        }
 
+                        else if (choose == 1) {
+
+                            cout << " kadencja: "; cin >> cadence;
+                            cout << "czas [s]: "; cin >> time;
+                            cout << "iteracje: "; cin >> iter;
+                            cout << "dzielnik kadencji: "; cin >> divCad;
+                            cout << "wierzcholki: "; cin >> randNodes;
+                            cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
+                            cout << endl;
+                        }
+
+                        else if (choose == 2){
+
+                            TabuSearch *ts = new TabuSearch();
+
+                            vector<unsigned int> path;
+                            path.resize(graph->getSize() + 1);
+                            int cost;
+
+                            ts->settingsTabuSearch(cadence, time, iter, divCad, randNodes, types);
+                            cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
+
+                            cout << "\nKoszt: " << cost << endl;
+                            cout << "Sciezka: " ;
+                            for (int i = 0; i < graph->getSize(); i++)
+                                cout << path[i] << " -> ";
+                            cout << path[graph->getSize()] << endl << endl;
+                        }
+                    }
                     break;
                 }
                 else {
