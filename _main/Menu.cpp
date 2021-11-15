@@ -13,16 +13,6 @@ Menu::~Menu() {
 }
 
 
-long long int read_QPC2() {
-
-    LARGE_INTEGER count;
-    DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), 0);
-    QueryPerformanceCounter(&count);
-    SetThreadAffinityMask(GetCurrentThread(), oldmask);
-    return((long long int)count.QuadPart);
-}
-
-
 
 void Menu::startMenu() {
 
@@ -44,7 +34,7 @@ void Menu::startMenu() {
                 " [2] - generuj losowy graf \n"
                 " [3] - wyswietl graf \n"
                 "  [4] - algorytm TS - tabu search \n"
-                "  [5] - algorytm SA - symulowane wyżarzanie \n"
+                "  [5] - algorytm SA - symulowane wyzarzanie \n"
                 " [9] - badanie efektywnosci \n"
                 " [0] - wyjscie \n";
 
@@ -73,24 +63,26 @@ void Menu::startMenu() {
             case 4:
                 if (graph != nullptr) {
 
+                    int cadenceTab[1] = { 120 }; //kadencja
+                    int timeTab[1] = { 2 };//czas wykonania algorytmu
+                    int iterTab[1] = { 5000 };//limit iteracji bez poprawy, po osiagnieciu ktorego jest generowana nowa sciezka
+                    int divCadTab[1] = {9}; //dzielnik kadencji (intensyfikacja) w przypadku znalezienia globalnie najlepszego rozwiazania
+                    int randNodesTab[1] = { 5 };//liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
+                    int typesTab[1] = {1};//rodzaj sasiedztwa
 
+                    TabuSearch *ts = new TabuSearch();
 
                     int* path = new int[graph->getSize() + 1];
                     int cost;
 
-                    QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
-                    start = read_QPC2();
-
-
-
-                    elapsed = read_QPC2() - start;
-                    cout << "Czas: " << setprecision(5) << (1000000.0 * elapsed) / frequency << " us" << endl;
+                    ts->setSettingsTabu(cadenceTab[0], timeTab[0], iterTab[0], divCadTab[0], randNodesTab[0], typesTab[0]);
+                    cost = ts->algorithmTabuSearch(graph->getMatrix());
 
                     cout << "Koszt: " << cost << endl;
-                    cout << "Sciezka: " ;
-                    for (int i = 0; i < graph->getSize(); i++)
-                        cout << path[i] << " -> ";
-                    cout << path[graph->getSize()];
+//                    cout << "Sciezka: " ;
+//                    for (int i = 0; i < graph->getSize(); i++)
+//                        cout << path[i] << " -> ";
+//                    cout << path[graph->getSize()];
 
                     break;
                 }
@@ -104,23 +96,15 @@ void Menu::startMenu() {
                 if (graph != nullptr) {
 
 
-
                     int* path = new int[graph->getSize() + 1];
                     int cost;
 
-                    QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
-                    start = read_QPC2();
 
-
-
-                    elapsed = read_QPC2() - start;
-                    cout << "Czas: " << setprecision(5) << (1000000.0 * elapsed) / frequency << " us" << endl;
-
-                    cout << "Koszt: " << cost << endl;
-                    cout << "Sciezka: " ;
-                    for (int i = 0; i < graph->getSize(); i++)
-                        cout << path[i] << " -> ";
-                    cout << path[graph->getSize()];
+//                    cout << "Koszt: " << cost << endl;
+//                    cout << "Sciezka: " ;
+//                    for (int i = 0; i < graph->getSize(); i++)
+//                        cout << path[i] << " -> ";
+//                    cout << path[graph->getSize()];
 
                     break;
                 }
