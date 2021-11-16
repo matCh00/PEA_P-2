@@ -54,12 +54,12 @@ void Menu::startMenu() {
             case 4:
                 if (graph != nullptr) {
 
-                    int cadence = 120 ; // kadencja
-                    int time = 2 ;      // czas wykonania
-                    int divCad = 9;     // dzielnik kadencji (intensyfikacja)
-                    int randNodes = 5 ; // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
-                    int types = 0;      // rodzaj sasiedztwa
-                    int iter = 5000 ;   // limit iteracji bez poprawy
+                    int cadence = 120 ;          // kadencja
+                    int time = 2 ;               // czas wykonania
+                    int divCad = 9;              // dzielnik kadencji (intensyfikacja)
+                    int randNodes = 5 ;          // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
+                    int types = 0;               // rodzaj sasiedztwa
+                    int iter = 5000 ;            // limit iteracji bez poprawy
                     bool diversification = true; // dywersyfikacja
                     int choose;
                     bool loop = true;
@@ -163,8 +163,7 @@ void Menu::startMenu() {
 
                 system("PAUSE");
                 Tests tests;
-                tests.startTests();
-                //tests.startAutomaticTests();
+                tests.startAutomaticTests();
                 break;
 
             case 0:

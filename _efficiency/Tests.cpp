@@ -2,103 +2,20 @@
 
 
 
-long long int read_QPC() {
-
-    LARGE_INTEGER count;
-    DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), 0);
-    QueryPerformanceCounter(&count);
-    SetThreadAffinityMask(GetCurrentThread(), oldmask);
-    return((long long int)count.QuadPart);
-}
-
-
-
-void Tests::startTests() {
-
-    Graph *graph = new Graph();
-    int instanceSize;
-    int* path;
-    int reps;
-    int alg;
-    int key = 1;
-    long long int frequency, start, elapsed;
-    long long int sum = 0;
-
-
-    ofstream file;
-    file.open("C:/Users/matic/Desktop/current projects/PEA_P-2/results.txt");
-
-    if(!file.is_open()) {
-
-        cout << "plik nie jest otwarty";
-    }
-
-
-
-    cout << "podaj liczbe miast:  ,  podaj liczbe powtorzen:  ,  wybierz: [1] - TS,  [2] - SA";
-    cin >> instanceSize; cin >> reps; cin >> alg;
-
-
-    while (key == 1) {
-
-
-        for (int i = 0; i < reps; ++i) {
-
-            graph = new Graph(instanceSize);
-            path = new int[instanceSize + 1];
-
-
-            if (alg == 1) {
-
-                QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
-                start = read_QPC();
-
-
-
-                elapsed = read_QPC() - start;
-                sum += (1000000.0 * elapsed) / frequency;
-
-                file << "TS: " << instanceSize << " miast,  czas [us]:  suma: " << setprecision(0) << sum << ", średnia: " << setprecision(0) << sum / reps << endl;
-            }
-
-
-            if (alg == 2) {
-
-                QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
-                start = read_QPC();
-
-
-
-                elapsed = read_QPC() - start;
-                sum += (1000000.0 * elapsed) / frequency;
-
-                file << "SA: " << instanceSize << " miast,  czas [us]:  suma: " << setprecision(0) << sum << ", średnia: " << setprecision(0) << sum / reps << endl;
-            }
-
-            sum = 0;
-        }
-
-
-        cout << "[x] - wyjscie,  [1] - dalej"; cin >> key;
-        if (key == 1) {
-
-            cout << "podaj liczbe miast:  ,  podaj liczbe powtorzen:  ,  wybierz: [1] - TS,  [2] - SA";
-            cin >> instanceSize; cin >> reps; cin >> alg;
-        }
-    }
-
-
-    file.close();
-}
-
-
-
 void Tests::startAutomaticTests() {
 
     Graph *graph;
-    int* path;
-    long long int frequency, start, elapsed;
-    long long int sum = 0;
+    vector<unsigned int> path;
+    int cost;
+
+    // parametry
+    vector<int> cadence = {40, 120};       // kadencja
+    vector<int> time = {2};                // czas wykonania
+    vector<int> divCad = {9};              // dzielnik kadencji (intensyfikacja)
+    vector<int> randNodes = {5};           // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
+    vector<int> types = {0, 1};            // rodzaj sasiedztwa
+    vector<int> iter = {5000};             // limit iteracji bez poprawy
+    vector<bool> diversification = {true}; // dywersyfikacja
 
 
     ofstream file;
@@ -110,57 +27,59 @@ void Tests::startAutomaticTests() {
     }
 
 
-    int reps = 100;
-    int instanceSize = 4;
+    TabuSearch *ts = new TabuSearch();
+
+    // TS
+
+    for (int num = 0; num < 3; num++) {
+
+        if (num == 0)
+            graph = new Graph("C:/Users/matic/Desktop/br17.atsp");
+
+        if (num == 1)
+            graph = new Graph("C:/Users/matic/Desktop/ftv64.atsp");
+
+        if (num == 2)
+            graph = new Graph("C:/Users/matic/Desktop/ftv170.atsp");
 
 
-    for (int i = 0; i < 14; ++i) {
-
-        instanceSize += 1;
+        path.resize(graph->getSize() + 1);
 
 
-        for (int i = 0; i < reps; ++i) {
+        for (int i = 0; i < cadence.size(); i++) {
 
-            graph = new Graph(instanceSize);
+            for (int j = 0; j < time.size(); j++) {
 
-            // TS
+                for (int k = 0; k < divCad.size(); k++) {
 
+                    for (int l = 0; l < randNodes.size(); l++) {
 
-            path = new int[instanceSize + 1];
+                        for (int m = 0; m < types.size(); m++) {
 
-            QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
-            start = read_QPC();
+                            for (int n = 0; n < diversification.size(); n++) {
 
+                                for (int p = 0; p < iter.size(); p++) {
 
+                                    ts->settingsTabuSearch(cadence[i], time[j], divCad[k], randNodes[l], types[m], diversification[n], iter[p]);
+                                    cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
 
-            elapsed = read_QPC() - start;
-            sum += (1000000.0 * elapsed) / frequency;
+                                    file << "TS:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  kadencja: " << cadence[i] <<
+                                    "  czas: " << time[j] << "  div: " << divCad[k] << "  nodes: " << randNodes[l] << "  sasiedztwo: " << types[m] <<
+                                    "  czy dywersyfikacja: " << diversification[n] << "  iter: " << iter[p] << endl;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-        file << "TS: " << instanceSize << " miast,  czas [us]:  suma: " << setprecision(0) << sum << ", średnia: " << setprecision(0) << sum / reps << endl;
-        sum = 0;
-
-
-
-        for (int i = 0; i < reps; ++i) {
-
-            graph = new Graph(instanceSize);
-
-            // SA
-
-
-            path = new int[instanceSize + 1];
-
-            QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
-            start = read_QPC();
-
-
-
-            elapsed = read_QPC() - start;
-            sum += (1000000.0 * elapsed) / frequency;
-        }
-        file << "SA: " << instanceSize << " miast,  czas [us]:  suma: " << setprecision(0) << sum << ", średnia: " << setprecision(0) << sum / reps << endl;
-        sum = 0;
     }
+
+
+    // SA
+
+
+    //file << "SA: " << endl;
 
 
     file.close();

@@ -18,7 +18,6 @@ class Tests {
 
 public:
 
-    void startTests();
     void startAutomaticTests();
 };
 
