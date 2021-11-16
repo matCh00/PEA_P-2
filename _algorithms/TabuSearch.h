@@ -20,9 +20,6 @@ private:
     // czas działania algorytmu
     int stopTime;
 
-    // limit iteracji - liczba iteracji bez poprawy globalnego minimum
-    int iterations;
-
     // dzielnik kadencji - liczba przez którą jest dzielona kadencja w wrazie znalezienia globalnego minimum (INTENSYFIKACJA)
     int cadenceDivider;
 
@@ -31,6 +28,18 @@ private:
 
     // typ sąsiedztwa (
     int neighborhoodType;
+
+    // dywersyfikacja - większy zakres przeszukiwania (długa kadencja)
+    // brak dokładnego przeszukiwania sąsiedztwa dobrych rozwiązań
+    // jest to procedura która pozwala na przeglądanie różnych obszarów przestrzeni rozwiązań
+    bool diversification;
+
+    // intensyfikacja - wieksza dokładność przeszukiwania (krótka kadencja)
+    // duże ryzyko wpadnięcia w cykl w pobliżu lokalnego minimum
+    bool intensification;
+
+    // limit iteracji - liczba iteracji bez poprawy globalnego minimum
+    int iterations;
 
     // macierz
     vector<vector<int>> matrix;
@@ -101,7 +110,7 @@ public:
     int algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
 
     // ustawienia Tabu Search
-    void settingsTabuSearch(int cadence, int stopTime, int iterations, int cadenceDivider, int nodesAmount, int neighborhoodType);
+    void settingsTabuSearch(int cadence, int stopTime, int cadenceDivider, int nodesAmount, int neighborhoodType, bool diversification, int iterations);
 };
 
 

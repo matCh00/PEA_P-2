@@ -32,7 +32,7 @@ void Menu::startMenu() {
                 " [2] - wyswietl graf \n"
                 "  [4] - algorytm TS - tabu search \n"
                 "  [5] - algorytm SA - symulowane wyzarzanie \n"
-                " [9] - badanie efektywnosci \n"
+                " [9] - pomiary automatyczne \n"
                 " [0] - wyjscie \n";
 
         cin >> key;
@@ -56,10 +56,11 @@ void Menu::startMenu() {
 
                     int cadence = 120 ; // kadencja
                     int time = 2 ;      // czas wykonania
-                    int iter = 5000 ;   // limit iteracji bez poprawy
                     int divCad = 9;     // dzielnik kadencji (intensyfikacja)
                     int randNodes = 5 ; // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
                     int types = 0;      // rodzaj sasiedztwa
+                    int iter = 5000 ;   // limit iteracji bez poprawy
+                    bool diversification = true; // dywersyfikacja
                     int choose;
                     bool loop = true;
 
@@ -77,16 +78,39 @@ void Menu::startMenu() {
 
                         else if (choose == 1) {
 
-                            cout << " kadencja: "; cin >> cadence;
-                            cout << "czas [s]: "; cin >> time;
-                            cout << "iteracje: "; cin >> iter;
-                            cout << "dzielnik kadencji: "; cin >> divCad;
-                            cout << "wierzcholki: "; cin >> randNodes;
-                            cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
+                            int x;
+                            cout << "1-kadencja, 2-czas, 3-dzielnik, 4-wierzcholki, 5-sasiedztwo, 6-dywersyfikacja i iteracje";
+                            cin >> x;
+
+                            if (x == 1) {
+                                cout << "kadencja: "; cin >> cadence;
+                            }
+
+                            else if (x == 2) {
+                                cout << "czas [s]: "; cin >> time;
+                            }
+
+                            else if (x == 3) {
+                                cout << "dzielnik kadencji: "; cin >> divCad;
+                            }
+
+                            else if (x == 4) {
+                                cout << "wierzcholki: "; cin >> randNodes;
+                            }
+
+                            else if (x == 5) {
+                                cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
+                            }
+
+                            else if (x == 6) {
+                                cout << "dywersyfikacja: true/false"; cin >> diversification;
+                                cout << "iteracje: "; cin >> iter;
+                            }
+
                             cout << endl;
                         }
 
-                        else if (choose == 2){
+                        else if (choose == 2) {
 
                             TabuSearch *ts = new TabuSearch();
 
@@ -94,7 +118,7 @@ void Menu::startMenu() {
                             path.resize(graph->getSize() + 1);
                             int cost;
 
-                            ts->settingsTabuSearch(cadence, time, iter, divCad, randNodes, types);
+                            ts->settingsTabuSearch(cadence, time, divCad, randNodes, types, diversification, iter);
                             cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
 
                             cout << "\nKoszt: " << cost << endl;

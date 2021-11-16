@@ -14,14 +14,15 @@ TabuSearch::~TabuSearch() {
 
 
 // TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
-void TabuSearch::settingsTabuSearch(int cadence, int stopTime, int iterations, int cadenceDivider, int nodesAmount, int neighborhoodType) {
+void TabuSearch::settingsTabuSearch(int cadence, int stopTime, int cadenceDivider, int nodesAmount, int neighborhoodType, bool diversification, int iterations) {
 
     this->cadence = cadence;
     this->stopTime = stopTime;
-    this->iterations = iterations;
     this->cadenceDivider = cadenceDivider;
     this->nodesAmount = nodesAmount;
     this->neighborhoodType = neighborhoodType;
+    this->diversification = diversification;
+    this->iterations = iterations;
 }
 
 
@@ -169,7 +170,6 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
     int bestBalance;
     int bestI = 0, bestJ = 0;
     int counter = 0, iterWithoutImprovement = 0;
-    bool intensification, diversification = true;
 
 
     while (continuing == true) {
@@ -225,7 +225,7 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
             intensification = false;
         }
 
-        //-----sprawdzenie czy nie doszlo do przekroczenia limutu iteracji------
+        //-----sprawdzenie czy nie doszlo do przekroczenia limutu iteracji------ DYWERSYFIKACJA
         if (iterWithoutImprovement > iterations) {
             if (diversification == true) {
 
