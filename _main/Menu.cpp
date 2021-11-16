@@ -79,7 +79,7 @@ void Menu::startMenu() {
                         else if (choose == 1) {
 
                             int x;
-                            cout << "1-kadencja, 2-czas, 3-dzielnik, 4-wierzcholki, 5-sasiedztwo, 6-dywersyfikacja i iteracje";
+                            cout << "1-kadencja, 2-czas, 3-dzielnik, 4-wierzcholki, 5-sasiedztwo, 6-dywersyfikacja i iteracje  ";
                             cin >> x;
 
                             if (x == 1) {
