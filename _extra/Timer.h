@@ -5,23 +5,24 @@
 
 #include <chrono>
 #include <iostream>
+#include <windows.h>
 
 using namespace std;
-using namespace chrono;
 
 
 class Timer {
 
 private:
 
-    // pomiar
-    duration<double> measurement;
+    // start
+    long long int begin;
 
-    // początek
-    time_point<steady_clock> tstart;
+    // stop
+    long long int end;
 
-    // koniec
-    time_point<steady_clock> tstop;
+    // częstotliwość
+    double frequency;
+
 
 public:
 
@@ -34,11 +35,8 @@ public:
     // początek pomiaru
     void start();
 
-    // koniec pomiaru
-    void stop();
-
-    // odczyt pomiaru
-    double read();
+    // koniec i odczyt pomiaru w [us]
+    long long int stop();
 };
 
 
