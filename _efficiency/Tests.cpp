@@ -87,6 +87,7 @@ void Tests::startAutomaticTests() {
     // parametry SA
     vector<double> initTemp = {100.0, 150.0};  // początkowa temperatura
     vector<double> minTemp = {0.1};            // minimalna temperatura
+    vector<int> timeSA = {5};            // minimalna temperatura
     vector<int> iterSA = {100};                // liczba iteracji
     vector<double> cooling = {0.999};          // współczynnik chłodzenia
     vector<int> typesSA = {0, 1};              // rodzaj sasiedztwa
@@ -114,18 +115,21 @@ void Tests::startAutomaticTests() {
 
             for (int j = 0; j < minTemp.size(); j++) {
 
-                for (int k = 0; k < iterSA.size(); k++) {
+                for (int n = 0; n < timeSA.size(); ++n) {
 
-                    for (int l = 0; l < cooling.size(); l++) {
+                    for (int k = 0; k < iterSA.size(); k++) {
 
-                        for (int m = 0; m < typesSA.size(); m++) {
+                        for (int l = 0; l < cooling.size(); l++) {
 
-                            sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], iterSA[k], cooling[l], typesSA[m]);
-                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+                            for (int m = 0; m < typesSA.size(); m++) {
 
-                            file << "TS:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
-                            "  minimalna temp: " << minTemp[j] << "  iter: " << iterSA[k] << "  cooling: " << cooling[l] <<
-                            "  sasiedztwo: " << typesSA[m] << endl;
+                                sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n], iterSA[k], cooling[l], typesSA[m]);
+                                cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+
+                                file << "TS:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
+                                "  minimalna temp: " << minTemp[j] << "czas: " << timeSA[n] << "  iter: " << iterSA[k] << "  cooling: " << cooling[l] <<
+                                "  sasiedztwo: " << typesSA[m] << endl;
+                            }
                         }
                     }
                 }
@@ -136,6 +140,7 @@ void Tests::startAutomaticTests() {
     initTemp.clear();
     minTemp.clear();
     iterSA.clear();
+    timeSA.clear();
     cooling.clear();
     typesSA.clear();
 

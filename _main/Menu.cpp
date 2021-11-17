@@ -41,7 +41,7 @@ void Menu::startMenu() {
         switch (key) {
 
             case 1:
-                cout << "podaj nazwe pliku: ";      // C:\Users\matic\Desktop\br17.atsp
+                cout << "podaj nazwe pliku: ";      // C:\Users\matic\Desktop\br17.atsp  C:\Users\matic\Desktop\ftv170.atsp
                 cin >> name;
                 graph = new Graph(name);
                 break;
@@ -142,11 +142,12 @@ void Menu::startMenu() {
             case 5:
                 if (graph != nullptr) {
 
-                    double initTemp = 100.0;  // początkowa temperatura
-                    double minTemp = 0.1;     // minimalna temperatura
-                    int iter = 100;           // liczba iteracji
-                    double cooling = 0.999;   // współczynnik chłodzenia
-                    int types = 0;            // rodzaj sasiedztwa
+                    double initTemp = 1000.0; // początkowa temperatura
+                    double minTemp = 0.001;   // minimalna temperatura
+                    int time = 5;             // czas wykonywania
+                    int iter = 1000;          // liczba iteracji
+                    double cooling = 0.99;    // współczynnik chłodzenia
+                    int types = 1;            // rodzaj sasiedztwa
                     int choose;
                     bool loop = true;
 
@@ -165,11 +166,11 @@ void Menu::startMenu() {
                         else if (choose == 1) {
 
                             int x;
-                            cout << "1-początkowa temp, 2-min temp, 3-iteracje, 4-chłodzenie, 5-sasiedztwo  ";
+                            cout << "1-poczatkowa temp, 2-min temp, 3-iteracje, 4-chlodzenie, 5-sasiedztwo, 6-czas  ";
                             cin >> x;
 
                             if (x == 1) {
-                                cout << "początkowa temperatura: "; cin >> initTemp;
+                                cout << "poczatkowa temperatura: "; cin >> initTemp;
                             }
 
                             else if (x == 2) {
@@ -181,11 +182,15 @@ void Menu::startMenu() {
                             }
 
                             else if (x == 4) {
-                                cout << "współczynnik chłodzenia: "; cin >> cooling;
+                                cout << "wspolczynnik chlodzenia: "; cin >> cooling;
                             }
 
                             else if (x == 5) {
                                 cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
+                            }
+
+                            else if (x == 6) {
+                                cout << "czas [s]: "; cin >> time;
                             }
 
                             cout << endl;
@@ -199,7 +204,7 @@ void Menu::startMenu() {
                             path.resize(graph->getSize() + 1);
                             int cost;
 
-                            sa->settingsSimulatedAnnealing(initTemp, minTemp, iter, cooling, types);
+                            sa->settingsSimulatedAnnealing(initTemp, minTemp, time, iter, cooling, types);
                             cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
 
                             cout << "\nKoszt: " << cost << endl;

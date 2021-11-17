@@ -69,6 +69,8 @@ int SimulatedAnnealing::getInitialGreedy(vector<unsigned> &bestTab) {
     return localMin;
 }
 
+
+
 int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath) {
 
     globalOptimum = 0;
@@ -81,7 +83,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
 
     globalOptimum = getInitialGreedy(bestRoute);
 
-    //int counter = 0;
+    int counter = 0;
     int currentCost = globalOptimum;
     vector <unsigned> currentRoute = bestRoute;
 
@@ -109,7 +111,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
                 currentOptimum = currentCost;
 
             }
-            else if (rand() / RAND_MAX < calculateProbability(currentOptimum, currentCost, temperature)) // Metropolis condition
+            else if ((double)rand() / RAND_MAX < calculateProbability(currentOptimum, currentCost, temperature)) // Metropolis condition
                 {
                 currentRoute = shuffled;
                 currentOptimum = currentCost;
@@ -119,16 +121,16 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
             }
 
             cout << "currentOptimum: " << currentOptimum << "     xxx: " << xxx++ << endl;
+
+
         }
-        //static_cast<double>(temperature = initialTemperature/(1+0.1*counter));
+        //(double)(temperature = temperature/(1+0.1*counter));
 
         temperature *= cooling;
 
-        //counter++;
+        counter++;
 
         onboardClock.stop();
-
-
         if (onboardClock.read() > stopTime)
             continuing = false;
     }
@@ -137,6 +139,8 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
     bestRoute = currentRoute;
     globalOptimum = currentOptimum;
 
+
+    bestPath = bestRoute;
 
     bestRoute.clear();
     currentRoute.clear();
@@ -148,6 +152,8 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
 
     return globalOptimum;
 }
+
+
 
 int SimulatedAnnealing::reshufflePath(vector <unsigned>& shuffled, vector <unsigned>&currentRoute) {
 
@@ -184,6 +190,8 @@ int SimulatedAnnealing::reshufflePath(vector <unsigned>& shuffled, vector <unsig
     return balance;
 
 }
+
+
 
 int SimulatedAnnealing::calculateProbability(int newCost, int oldCost, double temperature)
 {
