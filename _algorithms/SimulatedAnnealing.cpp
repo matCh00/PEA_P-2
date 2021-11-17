@@ -43,7 +43,11 @@ void SimulatedAnnealing::createPermutation(vector<int> &permutation) {
     vector<int> cities(matrixSize);
 
     // zapełnij wektor liczbami od 0 do matrixSize - 1
-    iota(begin(cities), end(cities), 0);
+    //iota(begin(cities), end(cities), 0);
+
+    for (int i = 0; i < matrixSize; i++) {
+        cities[i] = i;
+    }
 
     int random;
 
