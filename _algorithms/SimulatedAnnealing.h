@@ -20,6 +20,9 @@ private:
     // minimalna temperatura
     double minTemperature;
 
+    // czas działania algorytmu
+    int stopTime;
+
     // limit iteracji
     int iterationsLimit;
 
@@ -75,7 +78,7 @@ public:
     int algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
 
     // ustawienia Tabu Search
-    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int iterationsLimit, double cooling, int neighborhoodType);
+    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int stopTime, int iterationsLimit, double cooling, int neighborhoodType);
 };
 
 
