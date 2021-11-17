@@ -80,17 +80,11 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
     matrixSize = originalMatrix.size();
     matrix = originalMatrix;
     minTemperature = 0.001;
+    globalOptimum = INT_MAX;
+
+    // czas
+    double stopTimeMilliseconds = stopTime * 1000;
     double finishTime = 0;
-    Timer timer;
-
-
-    __int64 counter = 0;
-    double frequency = 1;
-    LARGE_INTEGER l_int;
-    QueryPerformanceFrequency(&l_int);
-    frequency = double(l_int.QuadPart);
-    QueryPerformanceCounter(&l_int);
-    counter = l_int.QuadPart;
 
 
     // deklaracja zmiennych i struktur
@@ -103,8 +97,10 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
     permutation1.resize(matrixSize);
     permutation2.resize(matrixSize);
 
-    // początek liczenia czasu
-    timer.start();
+    // początek mierzenia czasu
+    //auto begin = high_resolution_clock::now();
+    time_t begin, end;
+    time(&begin);
 
     for (int i = 0; i < matrixSize; i++) {
 
@@ -136,16 +132,24 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
         permutation2[i] = permutation1[i];
     }
 
+    // koniec mierzenia czasu i dodanie go do sumy
+    //auto end = high_resolution_clock::now();
+    //auto elapsed = duration_cast<milliseconds>(end - begin);
+    //finishTime += elapsed.count();
+    time(&end);
+    time_t elapsed = end - begin;
+    finishTime += elapsed;
 
-    std::time_t finish;
-    std::time_t start1 = std::time(NULL);
-    finish = start1 + (time_t)stopTime;
+    int counter = 0;;
 
-    int count = 0;;
+    while (temperature > minTemperature && finishTime < stopTime) {
 
-    while (temperature > minTemperature && start1<finish) {
+        // początek mierzenia czasu
+        //auto begin2 = high_resolution_clock::now();
+        time_t begin, end;
+        time(&begin);
 
-        count++;
+        counter++;
         do
         {
             //losowanie 2 nowych miast do zamiany w permutacji
@@ -164,6 +168,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
         if (cost2 <= cost1 || countProbability(cost1, cost2, temperature))
         {
             cost1 = cost2;//
+            cout << cost1 << "   " << counter<< endl;
             if (cost1 <= globalOptimum)
             {
                 globalOptimum = cost1;
@@ -185,17 +190,18 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
         temperature = (temperature/(1+beta*temperature));
 
 
-        start1 = std::time(NULL);
-        LARGE_INTEGER l_int;
-        QueryPerformanceCounter(&l_int);
-        return double(l_int.QuadPart - counter) / frequency;
-
-        // dodanie czasu
-        //finishTime += (double) (timer.stop() / 1000000.0);
+        // koniec mierzenia czasu i dodanie go do sumy
+        //auto end2 = high_resolution_clock::now();
+        //auto elapsed2 = duration_cast<milliseconds>(end2 - begin2);
+        //finishTime += elapsed.count();
+        time(&end);
+        time_t elapsed = end - begin;
+        finishTime += elapsed;
     }
 
     permutation1.clear();
     permutation2.clear();
+
 
     // zwrócenie kosztu
     return globalOptimum;

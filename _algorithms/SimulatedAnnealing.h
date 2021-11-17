@@ -8,6 +8,7 @@
 #include "../_structures/Graph.h"
 
 using namespace std;
+using namespace chrono;
 
 
 class SimulatedAnnealing {

@@ -4,12 +4,16 @@
 
 Timer::Timer() {
 
+    begin = 0;
+    end = 0;
 }
 
 
 
 Timer::~Timer() {
 
+    begin = 0;
+    end = 0;
 }
 
 
