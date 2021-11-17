@@ -20,7 +20,7 @@ void Tests::startAutomaticTests() {
 
     // parametry TS
     vector<int> cadence = {40, 120};        // kadencja
-    vector<int> timeTS = {2};               // czas wykonania
+    vector<int> timeTS = {2};                 // czas wykonania
     vector<int> divCad = {9};               // dzielnik kadencji (intensyfikacja)
     vector<int> randNodes = {5};            // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
     vector<int> typesTS = {0, 1};           // rodzaj sasiedztwa
@@ -85,7 +85,10 @@ void Tests::startAutomaticTests() {
 
 
     // parametry SA
-    vector<int> timeSA = {2};                  // czas wykonania
+    vector<double> initTemp = {100.0, 150.0};  // początkowa temperatura
+    vector<double> minTemp = {0.1};            // minimalna temperatura
+    vector<int> iterSA = {100};                // liczba iteracji
+    vector<double> cooling = {0.999};          // współczynnik chłodzenia
     vector<int> typesSA = {0, 1};              // rodzaj sasiedztwa
 
 
@@ -107,20 +110,33 @@ void Tests::startAutomaticTests() {
         path.resize(graph->getSize() + 1);
 
 
-        for (int n = 0; n < timeSA.size(); ++n) {
+        for (int i = 0; i < initTemp.size(); i++) {
 
-            for (int m = 0; m < typesSA.size(); m++) {
+            for (int j = 0; j < minTemp.size(); j++) {
 
-                sa->settingsSimulatedAnnealing(timeSA[n], typesSA[m]);
-                cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+                for (int k = 0; k < iterSA.size(); k++) {
 
-                file << "TS:  rozmiar: " << graph->getSize() << " znalezione optimum: "
-                << "czas: " << timeSA[n] << "  sasiedztwo: " << typesSA[m] << endl;
+                    for (int l = 0; l < cooling.size(); l++) {
+
+                        for (int m = 0; m < typesSA.size(); m++) {
+
+                            sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], iterSA[k], cooling[l], typesSA[m]);
+                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+
+                            file << "TS:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
+                            "  minimalna temp: " << minTemp[j] << "  iter: " << iterSA[k] << "  cooling: " << cooling[l] <<
+                            "  sasiedztwo: " << typesSA[m] << endl;
+                        }
+                    }
+                }
             }
         }
     }
 
-    timeSA.clear();
+    initTemp.clear();
+    minTemp.clear();
+    iterSA.clear();
+    cooling.clear();
     typesSA.clear();
 
 

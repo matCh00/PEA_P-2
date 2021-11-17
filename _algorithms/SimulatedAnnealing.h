@@ -8,25 +8,17 @@
 #include "../_structures/Graph.h"
 
 using namespace std;
-using namespace chrono;
 
 
 class SimulatedAnnealing {
 
 private:
 
-    // czas działania algorytmu
-    int stopTime;
-
-    // typ sąsiedztwa
-    int neighborhoodType;
+    // początkowa temperatura
+    double initialTemperature;
 
     // minimalna temperatura
     double minTemperature;
-
-
-    // początkowa temperatura
-    double initialTemperature;
 
     // limit iteracji
     int iterationsLimit;
@@ -34,7 +26,8 @@ private:
     // współczynnik chłodzenia
     double cooling;
 
-
+    // typ sąsiedztwa
+    int neighborhoodType;
 
     // macierz
     vector<vector<int>> matrix;
@@ -50,8 +43,6 @@ private:
 
     // lokalna funkcja celu
     int currentOptimum;
-
-
 
     // generowanie początkowej ścieżki i zwrócenie lokalnego minimum
     // algorytm zachłanny nie dokonuje oceny czy w kolejnych krokach jest sens wykonywać dane działanie
@@ -71,18 +62,6 @@ private:
     int calculateProbability(int newCost, int oldCost, double temperature);
 
 
-
-
-    // liczenie kosztu ścieżki
-    int countPath(vector<int> &path);
-
-    // tworzenie permutacji wierzchołków
-    void createPermutation(vector<int> &permutation);
-
-    // liczenie prawdopodobieństwa
-    bool countProbability(int length1, int length2, double temperature);
-
-
 public:
 
     // konstruktor
@@ -96,7 +75,7 @@ public:
     int algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
 
     // ustawienia Tabu Search
-    void settingsSimulatedAnnealing(int stopTime, int neighborhoodType);
+    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int iterationsLimit, double cooling, int neighborhoodType);
 };
 
 

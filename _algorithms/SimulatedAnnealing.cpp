@@ -13,11 +13,12 @@ SimulatedAnnealing::~SimulatedAnnealing() {
 
 
 // TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
-void SimulatedAnnealing::settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int stopTime, int iterationsLimit, double cooling, int neighborhoodType) {
+// TODO dodać w pętli warunek że po upływie czasu algorytm się kończy a nie zależy od temperatury
+// TODO dodać kryterium stopu do parametrów - czas
+void SimulatedAnnealing::settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int iterationsLimit, double cooling, int neighborhoodType) {
 
     this->initialTemperature = initialTemperature;
     this->minTemperature = minTemperature;
-    this->stopTime = stopTime;
     this->iterationsLimit = iterationsLimit;
     this->cooling = cooling;
     this->neighborhoodType = neighborhoodType;
@@ -81,7 +82,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
 
     globalOptimum = getInitialGreedy(bestRoute);
 
-    //int counter = 0;
+    int counter = 0;
     int currentCost = globalOptimum;
     vector <unsigned> currentRoute = bestRoute;
 
@@ -93,10 +94,8 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
     int balance;
     vector<unsigned> shuffled;
 
-    bool continuing = true;
-
-    while (continuing == true && temperature > minTemperature) {
-
+    do
+    {
         for (auto i = 0; i < iterationsLimit; i++)
         {
             shuffled = currentRoute;
@@ -109,7 +108,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
                 currentOptimum = currentCost;
 
             }
-            else if (rand() / RAND_MAX < calculateProbability(currentOptimum, currentCost, temperature)) // Metropolis condition
+            else if (static_cast<float>(rand()) / RAND_MAX < calculateProbability(currentOptimum, currentCost, temperature)) // Metropolis condition
                 {
                 currentRoute = shuffled;
                 currentOptimum = currentCost;
@@ -120,19 +119,12 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
 
             cout << "currentOptimum: " << currentOptimum << "     xxx: " << xxx++ << endl;
         }
-        //static_cast<double>(temperature = initialTemperature/(1+0.1*counter));
+        static_cast<double>(temperature = initialTemperature/(1+0.1*counter));
 
-        temperature *= cooling;
+        counter++;
+    } while (temperature>minTemperature);
 
-        //counter++;
-
-        onboardClock.stop();
-
-
-        if (onboardClock.read() > stopTime)
-            continuing = false;
-    }
-
+    onboardClock.stop();///////////
 
     bestRoute = currentRoute;
     globalOptimum = currentOptimum;
@@ -189,7 +181,7 @@ int SimulatedAnnealing::calculateProbability(int newCost, int oldCost, double te
 {
     float result;
 
-    result = (exp(-((newCost - oldCost) / temperature)));
+    result = (exp(-(static_cast<float>((newCost - oldCost) / temperature))));
 
     return result;
 }
