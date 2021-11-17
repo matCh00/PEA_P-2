@@ -39,7 +39,7 @@ private:
     bool intensification;
 
     // limit iteracji - liczba iteracji bez poprawy globalnego minimum
-    int iterations;
+    int iterationsLimit;
 
     // macierz
     vector<vector<int>> matrix;
