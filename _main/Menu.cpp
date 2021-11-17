@@ -54,10 +54,10 @@ void Menu::startMenu() {
             case 4:
                 if (graph != nullptr) {
 
-                    int cadence = 120 ;          // kadencja
-                    int time = 2 ;               // czas wykonania
+                    int cadence = 120;           // kadencja
+                    int time = 2;                // czas wykonania
                     int divCad = 9;              // dzielnik kadencji (intensyfikacja)
-                    int randNodes = 5 ;          // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
+                    int randNodes = 5;           // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
                     int types = 0;               // rodzaj sasiedztwa
                     int iter = 5000 ;            // limit iteracji bez poprawy
                     bool diversification = true; // dywersyfikacja
@@ -79,7 +79,7 @@ void Menu::startMenu() {
                         else if (choose == 1) {
 
                             int x;
-                            cout << "1-kadencja, 2-czas, 3-dzielnik, 4-wierzcholki, 5-sasiedztwo, 6-dywersyfikacja i iteracje  ";
+                            cout << "1-kadencja, 2-czas, 3-dzielnik, 4-wierzcholki, 5-sasiedztwo, 6-dywersyfikacja, 7-iteracje  ";
                             cin >> x;
 
                             if (x == 1) {
@@ -104,6 +104,9 @@ void Menu::startMenu() {
 
                             else if (x == 6) {
                                 cout << "dywersyfikacja: true/false"; cin >> diversification;
+                            }
+
+                            else if (x == 7) {
                                 cout << "iteracje: "; cin >> iter;
                             }
 
@@ -139,18 +142,73 @@ void Menu::startMenu() {
             case 5:
                 if (graph != nullptr) {
 
+                    double initTemp = 100.0;  // początkowa temperatura
+                    double minTemp = 0.1;     // minimalna temperatura
+                    int iter = 100;           // liczba iteracji
+                    double cooling = 0.999;   // współczynnik chłodzenia
+                    int types = 0;            // rodzaj sasiedztwa
+                    int choose;
+                    bool loop = true;
 
-                    int* path = new int[graph->getSize() + 1];
-                    int cost;
+                    while (loop) {
 
+                        cout << " [1] - ustaw parametry\n"
+                                " [2] - rozpocznij algorytm\n"
+                                " [0] - wyjdz\n" << endl;
+                        cin >> choose;
 
-//                    cout << "Koszt: " << cost << endl;
-//                    cout << "Sciezka: " ;
-//                    for (int i = 0; i < graph->getSize(); i++)
-//                        cout << path[i] << " -> ";
-//                    cout << path[graph->getSize()];
+                        if (choose == 0) {
 
-                    delete[] path;
+                            loop = false;
+                        }
+
+                        else if (choose == 1) {
+
+                            int x;
+                            cout << "1-początkowa temp, 2-min temp, 3-iteracje, 4-chłodzenie, 5-sasiedztwo  ";
+                            cin >> x;
+
+                            if (x == 1) {
+                                cout << "początkowa temperatura: "; cin >> initTemp;
+                            }
+
+                            else if (x == 2) {
+                                cout << "minimalna temperatura: "; cin >> minTemp;
+                            }
+
+                            else if (x == 3) {
+                                cout << "liczba iteracji: "; cin >> iter;
+                            }
+
+                            else if (x == 4) {
+                                cout << "współczynnik chłodzenia: "; cin >> cooling;
+                            }
+
+                            else if (x == 5) {
+                                cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
+                            }
+
+                            cout << endl;
+                        }
+
+                        else if (choose == 2) {
+
+                            SimulatedAnnealing *sa = new SimulatedAnnealing();
+
+                            vector<unsigned int> path;
+                            path.resize(graph->getSize() + 1);
+                            int cost;
+
+                            sa->settingsSimulatedAnnealing(initTemp, minTemp, iter, cooling, types);
+                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+
+                            cout << "\nKoszt: " << cost << endl;
+                            cout << "Sciezka: " ;
+                            for (int i = 0; i < graph->getSize(); i++)
+                                cout << path[i] << " -> ";
+                            cout << path[graph->getSize()] << endl << endl;
+                        }
+                    }
                     break;
                 }
                 else {

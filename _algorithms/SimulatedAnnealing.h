@@ -23,6 +23,9 @@ private:
     // limit iteracji
     int iterationsLimit;
 
+    // współczynnik chłodzenia
+    double cooling;
+
     // typ sąsiedztwa
     int neighborhoodType;
 
@@ -72,7 +75,7 @@ public:
     int algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
 
     // ustawienia Tabu Search
-    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int iterationsLimit, int neighborhoodType);
+    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int iterationsLimit, double cooling, int neighborhoodType);
 };
 
 

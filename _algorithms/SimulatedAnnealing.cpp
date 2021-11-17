@@ -15,11 +15,12 @@ SimulatedAnnealing::~SimulatedAnnealing() {
 // TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
 // TODO dodać w pętli warunek że po upływie czasu algorytm się kończy a nie zależy od temperatury
 // TODO dodać kryterium stopu do parametrów - czas
-void SimulatedAnnealing::settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int iterationsLimit, int neighborhoodType) {
+void SimulatedAnnealing::settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int iterationsLimit, double cooling, int neighborhoodType) {
 
     this->initialTemperature = initialTemperature;
     this->minTemperature = minTemperature;
     this->iterationsLimit = iterationsLimit;
+    this->cooling = cooling;
     this->neighborhoodType = neighborhoodType;
 }
 
@@ -74,7 +75,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
     globalOptimum = 0;
     currentOptimum = 0;
     matrixSize = originalMatrix.size();
-
+    int xxx = 0;/////////
     matrix = originalMatrix;
 
     vector <unsigned> route;
@@ -115,6 +116,8 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
             else {
                 currentCost = currentCost - balance;
             }
+
+            cout << "currentOptimum: " << currentOptimum << "     xxx: " << xxx++ << endl;
         }
         static_cast<double>(temperature = initialTemperature/(1+0.1*counter));
 
