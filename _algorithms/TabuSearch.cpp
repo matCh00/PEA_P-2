@@ -216,8 +216,8 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
         onboardClock.stop();
 
         //-----sprawdzenie czy uplynal czas------
-        if (onboardClock.read() > stopTime)
-            continuing = false;
+//        if (onboardClock.read() > stopTime)
+//            continuing = false;
 
         //-----w razie znalezienie globalnego optimum intensyfikacja------
         if (intensification == true) {

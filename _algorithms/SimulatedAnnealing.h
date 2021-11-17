@@ -14,14 +14,18 @@ class SimulatedAnnealing {
 
 private:
 
-    // początkowa temperatura
-    double initialTemperature;
+    // czas działania algorytmu
+    int stopTime;
+
+    // typ sąsiedztwa
+    int neighborhoodType;
 
     // minimalna temperatura
     double minTemperature;
 
-    // czas działania algorytmu
-    int stopTime;
+
+    // początkowa temperatura
+    double initialTemperature;
 
     // limit iteracji
     int iterationsLimit;
@@ -29,8 +33,7 @@ private:
     // współczynnik chłodzenia
     double cooling;
 
-    // typ sąsiedztwa
-    int neighborhoodType;
+
 
     // macierz
     vector<vector<int>> matrix;
@@ -46,6 +49,8 @@ private:
 
     // lokalna funkcja celu
     int currentOptimum;
+
+
 
     // generowanie początkowej ścieżki i zwrócenie lokalnego minimum
     // algorytm zachłanny nie dokonuje oceny czy w kolejnych krokach jest sens wykonywać dane działanie
@@ -65,6 +70,18 @@ private:
     double calculateProbability(int newCost, int oldCost, double temperature);
 
 
+
+
+    // liczenie kosztu ścieżki
+    int countPath(vector<int> &path);
+
+    // tworzenie permutacji wierzchołków
+    void createPermutation(vector<int> &permutation);
+
+    // liczenie prawdopodobieństwa
+    bool countProbability(int length1, int length2, double temperature);
+
+
 public:
 
     // konstruktor
@@ -78,7 +95,7 @@ public:
     int algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
 
     // ustawienia Tabu Search
-    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int stopTime, int iterationsLimit, double cooling, int neighborhoodType);
+    void settingsSimulatedAnnealing(int stopTime, int neighborhoodType);
 };
 
 

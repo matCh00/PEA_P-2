@@ -142,11 +142,7 @@ void Menu::startMenu() {
             case 5:
                 if (graph != nullptr) {
 
-                    double initTemp = 100.0;  // początkowa temperatura
-                    double minTemp = 0.1;     // minimalna temperatura
                     int time = 5;             // czas wykonania
-                    int iter = 100;           // liczba iteracji
-                    double cooling = 0.99;    // współczynnik chłodzenia
                     int types = 0;            // rodzaj sasiedztwa
                     int choose;
                     bool loop = true;
@@ -166,30 +162,14 @@ void Menu::startMenu() {
                         else if (choose == 1) {
 
                             int x;
-                            cout << "1-poczatkowa temp, 2-min temp, 3-czas, 4-iteracje, 5-chlodzenie, 6-sasiedztwo  ";
+                            cout << "1 - czas wykonania, 2 - rodzaj sasiedztwa  ";
                             cin >> x;
 
                             if (x == 1) {
-                                cout << "poczatkowa temperatura: "; cin >> initTemp;
-                            }
-
-                            else if (x == 2) {
-                                cout << "minimalna temperatura: "; cin >> minTemp;
-                            }
-
-                            else if (x == 3) {
                                 cout << "czas [s]: "; cin >> time;
                             }
 
-                            else if (x == 4) {
-                                cout << "liczba iteracji: "; cin >> iter;
-                            }
-
-                            else if (x == 5) {
-                                cout << "wspolczynnik chlodzenia: "; cin >> cooling;
-                            }
-
-                            else if (x == 6) {
+                            else if (x == 2) {
                                 cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
                             }
 
@@ -204,7 +184,7 @@ void Menu::startMenu() {
                             path.resize(graph->getSize() + 1);
                             int cost;
 
-                            sa->settingsSimulatedAnnealing(initTemp, minTemp, time, iter, cooling, types);
+                            sa->settingsSimulatedAnnealing(time, types);
                             cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
 
                             cout << "\nKoszt: " << cost << endl;

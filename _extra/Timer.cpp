@@ -4,8 +4,6 @@
 
 Timer::Timer() {
 
-    counter = 0;
-    frequency = 1;
 }
 
 
