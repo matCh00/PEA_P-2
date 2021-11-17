@@ -68,7 +68,7 @@ private:
     int reshufflePath(vector <unsigned>& shuffled, vector <unsigned>&currentRoute);
 
     // funkcja prawdopodobienstwa - uproszczonego algorytmu Metropolisa
-    double calculateProbability(int newCost, int oldCost, double temperature);
+    int calculateProbability(int newCost, int oldCost, double temperature);
 
 
 
