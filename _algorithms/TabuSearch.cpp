@@ -147,7 +147,7 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
     globalOptimum = INT_MAX;
     int greedyStart = 1;
 
-    int xxx = 0;/////////
+    //int xxx = 0;/////////
 
     // rezerwacja miejsca
     bestRoute.resize(matrixSize + 1);
@@ -194,7 +194,7 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
 
 
         currentOptimum = currentOptimum + bestBalance;
-        cout << "currentOptimum: " << currentOptimum << "     xxx: " << xxx++ << endl;
+        //cout << "currentOptimum: " << currentOptimum << "     xxx: " << xxx++ << endl;
 
         if (currentOptimum < globalOptimum) {
             iterWithoutImprovement = 0; //wyzerowanie w razie znalezienia globalnego minimum

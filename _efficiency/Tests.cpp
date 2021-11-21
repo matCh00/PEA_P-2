@@ -2,14 +2,11 @@
 
 
 
+ofstream file;
+
+
 void Tests::startAutomaticTests() {
 
-    Graph *graph;
-    vector<unsigned int> path;
-    int cost;
-
-
-    ofstream file;
     file.open("C:/Users/matic/Desktop/current projects/PEA_P-2/results.txt");
 
     if(!file.is_open()) {
@@ -17,6 +14,19 @@ void Tests::startAutomaticTests() {
         cout << "plik nie jest otwarty";
     }
 
+    SA();
+    TS();
+
+    file.close();
+}
+
+
+
+void Tests::TS() {
+
+    Graph *graph;
+    vector<unsigned int> path;
+    int cost;
 
     // parametry TS
     vector<int> cadence = {40, 120};        // kadencja
@@ -82,7 +92,15 @@ void Tests::startAutomaticTests() {
     typesTS.clear();
     diversification.clear();
     iterTS.clear();
+}
 
+
+
+void Tests::SA() {
+
+    Graph *graph;
+    vector<unsigned int> path;
+    int cost;
 
     // parametry SA
     vector<double> initTemp = {10.0, 150.0};  // początkowa temperatura
@@ -91,6 +109,7 @@ void Tests::startAutomaticTests() {
     vector<int> iterSA = {100};                // liczba iteracji
     vector<double> cooling = {0.999};          // współczynnik chłodzenia
     vector<int> typesSA = {0};              // rodzaj sasiedztwa
+
 
 
     // SA
@@ -126,7 +145,7 @@ void Tests::startAutomaticTests() {
                                 sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n], iterSA[k], cooling[l], typesSA[m]);
                                 cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
 
-                                file << "TS:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
+                                file << "SA:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
                                 "  minimalna temp: " << minTemp[j] << "czas: " << timeSA[n] << "  iter: " << iterSA[k] << "  cooling: " << cooling[l] <<
                                 "  sasiedztwo: " << typesSA[m] << endl;
                             }
@@ -143,7 +162,6 @@ void Tests::startAutomaticTests() {
     timeSA.clear();
     cooling.clear();
     typesSA.clear();
-
-
-    file.close();
 }
+
+

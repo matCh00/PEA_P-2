@@ -121,6 +121,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
 
         }
         static_cast<double>(temperature = initialTemperature/(1+0.1*counter));
+        //static_cast<double>(temperature = temperature/(1+0.1*counter));
 
 
         counter++;

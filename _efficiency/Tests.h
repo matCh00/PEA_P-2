@@ -19,6 +19,9 @@ class Tests {
 public:
 
     void startAutomaticTests();
+
+    void TS();
+    void SA();
 };
 
 

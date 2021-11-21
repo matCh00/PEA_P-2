@@ -145,9 +145,9 @@ void Menu::startMenu() {
                     double initTemp = 100.0; // początkowa temperatura
                     double minTemp = 0.001;   // minimalna temperatura
                     int time = 5;             // czas wykonywania
-                    int iter = 1000;          // liczba iteracji
+                    int iter = 100;          // liczba iteracji
                     double cooling = 0.99;    // współczynnik chłodzenia
-                    int types = 1;            // rodzaj sasiedztwa
+                    int types = 0;            // rodzaj sasiedztwa
                     int choose;
                     bool loop = true;
 
