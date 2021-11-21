@@ -142,7 +142,7 @@ void Menu::startMenu() {
             case 5:
                 if (graph != nullptr) {
 
-                    double initTemp = 1000.0; // początkowa temperatura
+                    double initTemp = 100.0; // początkowa temperatura
                     double minTemp = 0.001;   // minimalna temperatura
                     int time = 5;             // czas wykonywania
                     int iter = 1000;          // liczba iteracji

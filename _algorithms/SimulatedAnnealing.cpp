@@ -76,7 +76,6 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
     globalOptimum = 0;
     currentOptimum = 0;
     matrixSize = originalMatrix.size();
-    int xxx = 0;/////////
     matrix = originalMatrix;
 
     vector <unsigned> route;
@@ -111,7 +110,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
                 currentOptimum = currentCost;
 
             }
-            else if ((double)rand() / RAND_MAX < calculateProbability(currentOptimum, currentCost, temperature)) // Metropolis condition
+            else if (static_cast<float>(rand()) / RAND_MAX < calculateProbability(currentOptimum, currentCost, temperature)) // Metropolis condition
                 {
                 currentRoute = shuffled;
                 currentOptimum = currentCost;
@@ -120,13 +119,9 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
                 currentCost = currentCost - balance;
             }
 
-            cout << "currentOptimum: " << currentOptimum << "     xxx: " << xxx++ << endl;
-
-
         }
-        //(double)(temperature = temperature/(1+0.1*counter));
+        static_cast<double>(temperature = initialTemperature/(1+0.1*counter));
 
-        temperature *= cooling;
 
         counter++;
 
@@ -197,7 +192,7 @@ int SimulatedAnnealing::calculateProbability(int newCost, int oldCost, double te
 {
     float result;
 
-    result = (exp(-((newCost - oldCost) / temperature)));
+    result = (exp(-(static_cast<float>((newCost - oldCost) / temperature))));
 
     return result;
 }

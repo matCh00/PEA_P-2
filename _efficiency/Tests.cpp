@@ -20,10 +20,10 @@ void Tests::startAutomaticTests() {
 
     // parametry TS
     vector<int> cadence = {40, 120};        // kadencja
-    vector<int> timeTS = {2};                 // czas wykonania
+    vector<int> timeTS = {3};               // czas wykonania
     vector<int> divCad = {9};               // dzielnik kadencji (intensyfikacja)
     vector<int> randNodes = {5};            // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
-    vector<int> typesTS = {0, 1};           // rodzaj sasiedztwa
+    vector<int> typesTS = {0};           // rodzaj sasiedztwa
     vector<int> iterTS = {5000};            // limit iteracji bez poprawy
     vector<bool> diversification = {true};  // dywersyfikacja
 
@@ -85,12 +85,12 @@ void Tests::startAutomaticTests() {
 
 
     // parametry SA
-    vector<double> initTemp = {100.0, 150.0};  // początkowa temperatura
-    vector<double> minTemp = {0.1};            // minimalna temperatura
-    vector<int> timeSA = {5};            // minimalna temperatura
+    vector<double> initTemp = {10.0, 150.0};  // początkowa temperatura
+    vector<double> minTemp = {0.001};            // minimalna temperatura
+    vector<int> timeSA = {3};                  // czas wykonania
     vector<int> iterSA = {100};                // liczba iteracji
     vector<double> cooling = {0.999};          // współczynnik chłodzenia
-    vector<int> typesSA = {0, 1};              // rodzaj sasiedztwa
+    vector<int> typesSA = {0};              // rodzaj sasiedztwa
 
 
     // SA
