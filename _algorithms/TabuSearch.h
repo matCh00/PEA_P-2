@@ -18,7 +18,7 @@ private:
     int cadence;
 
     // czas działania algorytmu
-    int stopTime;
+    time_t stopTime;
 
     // dzielnik kadencji - liczba przez którą jest dzielona kadencja w wrazie znalezienia globalnego minimum (INTENSYFIKACJA)
     int cadenceDivider;
@@ -110,7 +110,7 @@ public:
     int algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
 
     // ustawienia Tabu Search
-    void settingsTabuSearch(int cadence, int stopTime, int cadenceDivider, int nodesAmount, int neighborhoodType, bool diversification, int iterations);
+    void settingsTabuSearch(int cadence, time_t stopTime, int cadenceDivider, int nodesAmount, int neighborhoodType, bool diversification, int iterations);
 };
 
 

@@ -138,7 +138,7 @@ void Menu::startMenu() {
                 if (graph != nullptr) {
 
                     int cadence = 120;           // kadencja
-                    int time = 2;                // czas wykonania
+                    time_t time = 2;                // czas wykonania
                     int divCad = 9;              // dzielnik kadencji (intensyfikacja)
                     int randNodes = 5;           // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
                     int types = 0;               // rodzaj sasiedztwa

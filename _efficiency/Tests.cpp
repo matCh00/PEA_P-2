@@ -100,7 +100,7 @@ void Tests::TS() {
 
     // parametry TS
     vector<int> cadence = {40, 120};        // kadencja
-    vector<int> timeTS = {3};               // czas wykonania
+    vector<time_t> timeTS = {3};               // czas wykonania
     vector<int> divCad = {9};               // dzielnik kadencji (intensyfikacja)
     vector<int> randNodes = {5};            // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
     vector<int> typesTS = {0};           // rodzaj sasiedztwa
