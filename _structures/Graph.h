@@ -17,6 +17,7 @@
 #include <cmath>
 #include <queue>
 #include <numeric>
+#include <windows.h>
 #include "../_extra/Randomize.h"
 #include "../_extra/Timer.h"
 

@@ -14,6 +14,7 @@ TabuSearch::~TabuSearch() {
 
 
 // TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
+// TODO uprościć TS
 void TabuSearch::settingsTabuSearch(int cadence, int stopTime, int cadenceDivider, int nodesAmount, int neighborhoodType, bool diversification, int iterations) {
 
     this->cadence = cadence;

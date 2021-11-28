@@ -15,9 +15,79 @@ void Tests::startAutomaticTests() {
     }
 
     SA();
-    TS();
+    //TS();
 
     file.close();
+}
+
+
+
+void Tests::SA() {
+
+    Graph *graph;
+    vector<int> path;
+    int cost;
+
+    // parametry SA
+    vector<double> initTemp = {10.0, 100.0, 1000.0};  // początkowa temperatura
+    vector<double> minTemp = {0.001, 0.0000001};            // minimalna temperatura
+    vector<time_t> timeSA = {3, 10};                  // czas wykonania
+    vector<int> iterSA = {5, 100};                // liczba iteracji
+    vector<double> cooling = {0.999};          // współczynnik chłodzenia
+    vector<int> typesSA = {0, 1};              // rodzaj sasiedztwa
+
+
+
+    // SA
+    SimulatedAnnealing *sa = new SimulatedAnnealing();
+
+    for (int num = 0; num < 3; num++) {
+
+        if (num == 0)
+            graph = new Graph("C:/Users/matic/Desktop/br17.atsp");
+
+        if (num == 1)
+            graph = new Graph("C:/Users/matic/Desktop/ftv64.atsp");
+
+        if (num == 2)
+            graph = new Graph("C:/Users/matic/Desktop/ftv170.atsp");
+
+
+        path.resize(graph->getSize() + 1);
+
+
+        for (int i = 0; i < initTemp.size(); i++) {
+
+            for (int j = 0; j < minTemp.size(); j++) {
+
+                for (int n = 0; n < timeSA.size(); ++n) {
+
+                    for (int k = 0; k < iterSA.size(); k++) {
+
+                        for (int l = 0; l < cooling.size(); l++) {
+
+                            for (int m = 0; m < typesSA.size(); m++) {
+
+                                sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n], iterSA[k], cooling[l], typesSA[m]);
+                                cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+
+                                file << "SA:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
+                                "  minimalna temp: " << minTemp[j] << "czas: " << timeSA[n] << "  iter: " << iterSA[k] << "  cooling: " << cooling[l] <<
+                                "  sasiedztwo: " << typesSA[m] << endl;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    initTemp.clear();
+    minTemp.clear();
+    iterSA.clear();
+    timeSA.clear();
+    cooling.clear();
+    typesSA.clear();
 }
 
 
@@ -92,76 +162,6 @@ void Tests::TS() {
     typesTS.clear();
     diversification.clear();
     iterTS.clear();
-}
-
-
-
-void Tests::SA() {
-
-    Graph *graph;
-    vector<unsigned int> path;
-    int cost;
-
-    // parametry SA
-    vector<double> initTemp = {10.0, 150.0};  // początkowa temperatura
-    vector<double> minTemp = {0.001};            // minimalna temperatura
-    vector<int> timeSA = {3};                  // czas wykonania
-    vector<int> iterSA = {100};                // liczba iteracji
-    vector<double> cooling = {0.999};          // współczynnik chłodzenia
-    vector<int> typesSA = {0};              // rodzaj sasiedztwa
-
-
-
-    // SA
-    SimulatedAnnealing *sa = new SimulatedAnnealing();
-
-    for (int num = 0; num < 3; num++) {
-
-        if (num == 0)
-            graph = new Graph("C:/Users/matic/Desktop/br17.atsp");
-
-        if (num == 1)
-            graph = new Graph("C:/Users/matic/Desktop/ftv64.atsp");
-
-        if (num == 2)
-            graph = new Graph("C:/Users/matic/Desktop/ftv170.atsp");
-
-
-        path.resize(graph->getSize() + 1);
-
-
-        for (int i = 0; i < initTemp.size(); i++) {
-
-            for (int j = 0; j < minTemp.size(); j++) {
-
-                for (int n = 0; n < timeSA.size(); ++n) {
-
-                    for (int k = 0; k < iterSA.size(); k++) {
-
-                        for (int l = 0; l < cooling.size(); l++) {
-
-                            for (int m = 0; m < typesSA.size(); m++) {
-
-                                sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n], iterSA[k], cooling[l], typesSA[m]);
-                                cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
-
-                                file << "SA:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
-                                "  minimalna temp: " << minTemp[j] << "czas: " << timeSA[n] << "  iter: " << iterSA[k] << "  cooling: " << cooling[l] <<
-                                "  sasiedztwo: " << typesSA[m] << endl;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    initTemp.clear();
-    minTemp.clear();
-    iterSA.clear();
-    timeSA.clear();
-    cooling.clear();
-    typesSA.clear();
 }
 
 

@@ -13,6 +13,14 @@ using namespace std;
 class SimulatedAnnealing {
 
 private:
+    __int64 counter = 0;
+    double frequency = 1;
+    const double e = 2.718281828459;
+    double min_temperature = 0.001;
+    double solution = 0;
+    int optimum = 0;
+    int cities;
+    vector<int> path;
 
     // początkowa temperatura
     double initialTemperature;
@@ -32,53 +40,33 @@ private:
     // typ sąsiedztwa
     int neighborhoodType;
 
-    // macierz
-    vector<vector<int>> matrix;
-
-    // wielkość macierzy
-    int matrixSize;
-
-    // globalnie optymalna ścieżka
-    vector<unsigned int> bestRoute;
-
-    // globalna funkcja celu
-    int globalOptimum;
-
-    // lokalna funkcja celu
-    int currentOptimum;
-
-    // generowanie początkowej ścieżki i zwrócenie lokalnego minimum
-    // algorytm zachłanny nie dokonuje oceny czy w kolejnych krokach jest sens wykonywać dane działanie
-    // dokonuje decyzji lokalnie optymalnej, kontynuując rozwiązanie podproblemu wynikającego z podjętej decyzji
-    int getInitialGreedy(vector<unsigned> &route);
-
-    // sprawdzenie kosztu
-    int calculateReverse(int i, int j, vector<unsigned> &currentRoute);
-
-    // sprawdzenie kosztu
-    int calculateSwap(int i, int j, vector<unsigned> &currentRoute);
-
-    // przetasowanie ścieżki
-    int reshufflePath(vector <unsigned>& shuffled, vector <unsigned>&currentRoute);
-
-    // funkcja prawdopodobienstwa - uproszczonego algorytmu Metropolisa
-    int calculateProbability(int newCost, int oldCost, double temperature);
-
-
 public:
 
-    // konstruktor
     SimulatedAnnealing();
-
-    // destruktor
     ~SimulatedAnnealing();
 
-    // algorytm
-    // ustawianie wartości początkowych i zaczęcie algorytmu
-    int algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<unsigned int> &bestPath);
+    void setOptimum(int opt);
 
-    // ustawienia Tabu Search
-    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, int stopTime, int iterationsLimit, double cooling, int neighborhoodType);
+    //wyliczenie czasu końcowego
+    double stop();
+    //ustawienie danych potrzebnych do mierzenia czasu
+    void start();
+
+    vector<vector<int>> matrix;
+
+    //obliczanie drogi pomiędzy miastami
+    int route(vector<int> &perm);
+
+    //losowanie
+    void permutation(vector<int> &perm);
+
+    //prawdopodobienstwo wybrania sasiedniego miasta
+    bool probability(int length1, int length2, double temperature);
+
+    //algorytm symulowanego wyrzazania
+    int algorithmSimulatedAnnealing(vector<vector<int>> matrix1, vector<int> &bestPath);
+
+    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, time_t stopTime, int iterationsLimit, double cooling, int neighborhoodType);
 };
 
 

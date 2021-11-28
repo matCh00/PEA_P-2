@@ -30,8 +30,8 @@ void Menu::startMenu() {
 
         cout << "\n [1] - wczytaj dane z pliku \n"
                 " [2] - wyswietl graf \n"
-                "  [4] - algorytm TS - tabu search \n"
-                "  [5] - algorytm SA - symulowane wyzarzanie \n"
+                "  [4] - algorytm SA - symulowane wyzarzanie \n"
+                "  [5] - algorytm TS - tabu search \n"
                 " [9] - pomiary automatyczne \n"
                 " [0] - wyjscie \n";
 
@@ -52,6 +52,89 @@ void Menu::startMenu() {
                 break;
 
             case 4:
+                if (graph != nullptr) {
+
+                    double initTemp = 50.0; // początkowa temperatura
+                    double minTemp = 0.00001;   // minimalna temperatura
+                    time_t time = 10;             // czas wykonywania
+                    int iter = 1000;          // liczba iteracji
+                    double cooling = 0.99;    // współczynnik chłodzenia
+                    int types = 0;            // rodzaj sasiedztwa
+                    int choose;
+                    bool loop = true;
+
+                    while (loop) {
+
+                        cout << " [1] - ustaw parametry\n"
+                                " [2] - rozpocznij algorytm\n"
+                                " [0] - wyjdz\n" << endl;
+                        cin >> choose;
+
+                        if (choose == 0) {
+
+                            loop = false;
+                        }
+
+                        else if (choose == 1) {
+
+                            int x;
+                            cout << "1-poczatkowa temp, 2-min temp, 3-iteracje, 4-chlodzenie, 5-sasiedztwo, 6-czas  ";
+                            cin >> x;
+
+                            if (x == 1) {
+                                cout << "poczatkowa temperatura: "; cin >> initTemp;
+                            }
+
+                            else if (x == 2) {
+                                cout << "minimalna temperatura: "; cin >> minTemp;
+                            }
+
+                            else if (x == 3) {
+                                cout << "liczba iteracji: "; cin >> iter;
+                            }
+
+                            else if (x == 4) {
+                                cout << "wspolczynnik chlodzenia: "; cin >> cooling;
+                            }
+
+                            else if (x == 5) {
+                                cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
+                            }
+
+                            else if (x == 6) {
+                                cout << "czas [s]: "; cin >> time;
+                            }
+
+                            cout << endl;
+                        }
+
+                        else if (choose == 2) {
+
+                            SimulatedAnnealing *sa = new SimulatedAnnealing();
+
+                            vector<int> path;
+                            path.resize(graph->getSize() + 1);
+                            int cost;
+
+                            sa->settingsSimulatedAnnealing(initTemp, minTemp, time, iter, cooling, types);
+                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+
+                            cout << "\nKoszt: " << cost << endl;
+                            cout << "Sciezka: " ;
+                            for (int i = 0; i < graph->getSize(); i++)
+                                cout << path[i] << " -> ";
+                            cout << path[graph->getSize()] << endl << endl;
+                        }
+                    }
+                    break;
+                }
+                else {
+
+                    cout << "macierz jest pusta \n";
+                }
+                break;
+
+            case 5:
                 if (graph != nullptr) {
 
                     int cadence = 120;           // kadencja
@@ -123,89 +206,6 @@ void Menu::startMenu() {
 
                             ts->settingsTabuSearch(cadence, time, divCad, randNodes, types, diversification, iter);
                             cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
-
-                            cout << "\nKoszt: " << cost << endl;
-                            cout << "Sciezka: " ;
-                            for (int i = 0; i < graph->getSize(); i++)
-                                cout << path[i] << " -> ";
-                            cout << path[graph->getSize()] << endl << endl;
-                        }
-                    }
-                    break;
-                }
-                else {
-
-                    cout << "macierz jest pusta \n";
-                }
-                break;
-
-            case 5:
-                if (graph != nullptr) {
-
-                    double initTemp = 100.0; // początkowa temperatura
-                    double minTemp = 0.001;   // minimalna temperatura
-                    int time = 5;             // czas wykonywania
-                    int iter = 100;          // liczba iteracji
-                    double cooling = 0.99;    // współczynnik chłodzenia
-                    int types = 0;            // rodzaj sasiedztwa
-                    int choose;
-                    bool loop = true;
-
-                    while (loop) {
-
-                        cout << " [1] - ustaw parametry\n"
-                                " [2] - rozpocznij algorytm\n"
-                                " [0] - wyjdz\n" << endl;
-                        cin >> choose;
-
-                        if (choose == 0) {
-
-                            loop = false;
-                        }
-
-                        else if (choose == 1) {
-
-                            int x;
-                            cout << "1-poczatkowa temp, 2-min temp, 3-iteracje, 4-chlodzenie, 5-sasiedztwo, 6-czas  ";
-                            cin >> x;
-
-                            if (x == 1) {
-                                cout << "poczatkowa temperatura: "; cin >> initTemp;
-                            }
-
-                            else if (x == 2) {
-                                cout << "minimalna temperatura: "; cin >> minTemp;
-                            }
-
-                            else if (x == 3) {
-                                cout << "liczba iteracji: "; cin >> iter;
-                            }
-
-                            else if (x == 4) {
-                                cout << "wspolczynnik chlodzenia: "; cin >> cooling;
-                            }
-
-                            else if (x == 5) {
-                                cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
-                            }
-
-                            else if (x == 6) {
-                                cout << "czas [s]: "; cin >> time;
-                            }
-
-                            cout << endl;
-                        }
-
-                        else if (choose == 2) {
-
-                            SimulatedAnnealing *sa = new SimulatedAnnealing();
-
-                            vector<unsigned int> path;
-                            path.resize(graph->getSize() + 1);
-                            int cost;
-
-                            sa->settingsSimulatedAnnealing(initTemp, minTemp, time, iter, cooling, types);
-                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
 
                             cout << "\nKoszt: " << cost << endl;
                             cout << "Sciezka: " ;
