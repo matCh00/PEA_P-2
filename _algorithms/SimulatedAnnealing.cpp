@@ -13,15 +13,11 @@ SimulatedAnnealing::~SimulatedAnnealing() {
 
 
 // TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
-// TODO dodać limit iteracji i typy sąsiedztwa na podstawie koks projektu
-void SimulatedAnnealing::settingsSimulatedAnnealing(double maxTemperature, double minTemperature, time_t executionTime, int iterationsLimit, int neighborhoodType) {
+void SimulatedAnnealing::settingsSimulatedAnnealing(double maxTemperature, double minTemperature, time_t executionTime) {
 
     this->maxTemperature = maxTemperature;
     this->minTemperature = minTemperature;
     this->executionTime = executionTime;
-
-    this->iterationsLimit = iterationsLimit;
-    this->neighborhoodType = neighborhoodType;
 }
 
 
@@ -45,14 +41,14 @@ int SimulatedAnnealing::route(vector<int> &currentPath) {
 
 void SimulatedAnnealing::permutation(vector<int> &currentPath) {
 
+    // pomocnicza tablica
     vector<int> num;
     num.resize(matrixSize);
 
     int random;
 
-    for (int i = 0; i < matrixSize; i++) {
-        num[i] = i;
-    }
+    // wypełnienie wektora
+    iota(num.begin(), num.end(), 0);
 
     for (int i = matrixSize; i > 0; i--) {
 
@@ -74,31 +70,6 @@ void SimulatedAnnealing::permutation(vector<int> &currentPath) {
     }
 
     num.clear();
-
-//    Randomize r;
-//
-//    int i, j, balance = 0;
-//
-//    if (neighborhoodType == 1) { //swap
-//        do {
-//            i = r.random_engine(1, matrixSize - 2);
-//            j = r.random_engine(1, matrixSize - 2);
-//        } while (i == j || j < i);
-//
-//        unsigned buffer = perm.at(j);
-//        perm.at(j) = perm.at(i);
-//        perm.at(i) = buffer;
-//    }
-//
-//
-//    else if (neighborhoodType == 0) {
-//        do {
-//            i = r.random_engine(1, matrixSize - 2);
-//            j = r.random_engine(1, matrixSize - 2);
-//        } while (i == j || j < i);
-//
-//        reverse(perm.begin() + i, perm.begin() + j + 1);
-//    }
 }
 
 
@@ -119,30 +90,26 @@ bool SimulatedAnnealing::probability(int length1, int length2, double temperatur
 
 
 
-int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<int> &bestPath) {
+double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<int> &bestPath, int &bestCost) {
 
     Timer timer;
 
+    // rozpoczęcie mierzenia czasu
+    timer.start();
+
     // wartości początkowe
-    bestCost = INT_MAX;
+    foundOptimum = INT_MAX;
     matrix = originalMatrix;
     matrixSize = originalMatrix.size();
 
     int vertex1, vertex2;
     double cost1, cost2;
 
-    vector<int> permutation1;
-    permutation1.resize(matrixSize);
-
-    vector<int> permutation2;
-    permutation2.resize(matrixSize);
+    vector<int> permutation1(matrixSize);
+    vector<int> permutation2(matrixSize);
 
     // zaczynamy od maxymalnej temperatury
     currentTemperature = maxTemperature;
-
-
-    // rozpoczęcie mierzenia czasu
-    timer.start();
 
     // pierwsza permutacja miast i jej koszt
     permutation(permutation1);
@@ -150,7 +117,6 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
 
     // zapasowa permutacja
     permutation2 = permutation1;
-
 
     time_t finishTime;
     time_t startTime = time(NULL);
@@ -180,9 +146,9 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
             cost1 = cost2;
 
             // jeżeli jest mniejsze od minimum globalnego
-            if (cost1 <= bestCost) {
+            if (cost1 <= foundOptimum) {
 
-                bestCost = cost1;
+                foundOptimum = cost1;
                 path = permutation2;
             }
 
@@ -191,7 +157,6 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
             permutation1[vertex2] = permutation2[vertex2];
         }
         else {
-
             permutation2[vertex1] = permutation1[vertex1];
             permutation2[vertex2] = permutation1[vertex2];
         }
@@ -214,5 +179,7 @@ int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> original
 
     // zwrócenie wyników
     bestPath = path;
-    return bestCost;
+    bestCost = foundOptimum;
+
+    return timer.stop();
 }

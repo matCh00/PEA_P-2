@@ -58,16 +58,14 @@ void Menu::startMenu() {
                     double minTemp = 1.00079;   // minimalna temperatura
                     time_t time = 10;           // czas wykonywania
 
-                    int iter = 1000;          // liczba iteracji
-                    int types = 0;            // rodzaj sasiedztwa
-
                     int choose;
                     bool loop = true;
 
                     while (loop) {
 
-                        cout << " [1] - ustaw parametry\n"
-                                " [2] - rozpocznij algorytm\n"
+                        cout << " [1] - pokaz parametry\n"
+                                " [2] - ustaw parametry\n"
+                                " [3] - rozpocznij algorytm\n"
                                 " [0] - wyjdz\n" << endl;
                         cin >> choose;
 
@@ -78,8 +76,15 @@ void Menu::startMenu() {
 
                         else if (choose == 1) {
 
+                            cout << " poczatkowa temperatura: " << maxTemp <<
+                                    "\n minimalna temperatura: " << minTemp <<
+                                    "\n czas [s]: " << time << endl << endl;
+                        }
+
+                        else if (choose == 2) {
+
                             int x;
-                            cout << "1-max temp, 2-min temp, 3-czas, 4-iteracje, 5-sasiedztwo";
+                            cout << "1) max temp, 2) min temp, 3) czas";
                             cin >> x;
 
                             if (x == 1) {
@@ -94,29 +99,22 @@ void Menu::startMenu() {
                                 cout << "czas [s]: "; cin >> time;
                             }
 
-                            else if (x == 4) {
-                                cout << "limit iteracji: "; cin >> iter;
-                            }
-
-                            else if (x == 5) {
-                                cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
-                            }
-
                             cout << endl;
                         }
 
-                        else if (choose == 2) {
+                        else if (choose == 3) {
 
                             SimulatedAnnealing *sa = new SimulatedAnnealing();
 
-                            vector<int> path;
-                            path.resize(graph->getSize() + 1);
+                            vector<int> path(graph->getSize() + 1);
                             int cost;
+                            double exeTime;
 
-                            sa->settingsSimulatedAnnealing(maxTemp, minTemp, time, iter, types);
-                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
+                            sa->settingsSimulatedAnnealing(maxTemp, minTemp, time);
+                            exeTime = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path, cost);
 
-                            cout << "\nKoszt: " << cost << endl;
+                            cout << "\nCzas: " << exeTime << " s" << endl;
+                            cout << "Koszt: " << cost << endl;
                             cout << "Sciezka: " ;
                             for (int i = 0; i < graph->getSize(); i++)
                                 cout << path[i] << " -> ";

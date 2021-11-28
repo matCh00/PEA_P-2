@@ -36,15 +36,7 @@ private:
     vector<int> path;
 
     // najmniejszy znaleziony koszt
-    int bestCost;
-
-
-    // limit iteracji
-    int iterationsLimit;
-
-    // typ sąsiedztwa
-    int neighborhoodType;
-
+    int foundOptimum;
 
     // obliczanie drogi
     int route(vector<int> &currentPath);
@@ -65,10 +57,10 @@ public:
     ~SimulatedAnnealing();
 
     // algorytm Simulated Annealing
-    int algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<int> &bestPath);
+    double algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<int> &bestPath, int &bestCost);
 
     // ustawienia Simulated Annealing
-    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, time_t stopTime, int iterationsLimit, int neighborhoodType);
+    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, time_t stopTime);
 };
 
 

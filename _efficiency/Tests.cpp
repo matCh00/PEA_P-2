@@ -1,7 +1,6 @@
 #include "Tests.h"
 
 
-
 ofstream file;
 
 
@@ -27,13 +26,12 @@ void Tests::SA() {
     Graph *graph;
     vector<int> path;
     int cost;
+    double exeTime;
 
     // parametry SA
-    vector<double> initTemp = {10.0, 100.0, 1000.0};  // początkowa temperatura
-    vector<double> minTemp = {0.001, 0.0000001};      // minimalna temperatura
-    vector<time_t> timeSA = {3, 10};                  // czas wykonania
-    vector<int> iterSA = {5, 100};                    // liczba iteracji
-    vector<int> typesSA = {0, 1};                     // rodzaj sasiedztwa
+    vector<double> initTemp = {10.0, 1000.0, 2500.0};
+    vector<double> minTemp = {0.001, 1.0, 1.0008, 1.005};
+    vector<time_t> timeSA = {3, 10};
 
 
     // SA
@@ -60,17 +58,11 @@ void Tests::SA() {
 
                 for (int n = 0; n < timeSA.size(); ++n) {
 
-                    for (int k = 0; k < iterSA.size(); k++) {
+                    sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n]);
+                    exeTime = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path, cost);
 
-                        for (int m = 0; m < typesSA.size(); m++) {
-
-                            sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n], iterSA[k], typesSA[m]);
-                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
-
-                            file << "SA:  rozmiar: " << graph->getSize() << " koszt: " << cost << "  max temp: " << initTemp[i] <<
-                            "  min temp: " << minTemp[j] << "czas: " << timeSA[n] << "  iteracje: " << iterSA[k] <<"  sasiedztwo: " << typesSA[m] << endl;
-                        }
-                    }
+                    file << "SA:  rozmiar: " << graph->getSize() << " koszt: " << cost << " czas wykonania: " << exeTime <<
+                    "  max temp: " << initTemp[i] << "  min temp: " << minTemp[j] << "czas: " << timeSA[n] << endl;
                 }
             }
         }
@@ -78,9 +70,7 @@ void Tests::SA() {
 
     initTemp.clear();
     minTemp.clear();
-    iterSA.clear();
     timeSA.clear();
-    typesSA.clear();
 }
 
 
