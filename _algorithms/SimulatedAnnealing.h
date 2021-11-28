@@ -13,60 +13,62 @@ using namespace std;
 class SimulatedAnnealing {
 
 private:
-    __int64 counter = 0;
-    double frequency = 1;
-    const double e = 2.718281828459;
-    double min_temperature = 0.001;
-    double solution = 0;
-    int optimum = 0;
-    int cities;
-    vector<int> path;
 
     // początkowa temperatura
-    double initialTemperature;
+    double maxTemperature;
 
     // minimalna temperatura
     double minTemperature;
 
+    // aktualna temperatura
+    double currentTemperature;
+
     // czas wykonania
-    int stopTime;
+    time_t executionTime;
+
+    // macierz
+    vector<vector<int>> matrix;
+
+    // liczba miast
+    int matrixSize;
+
+    // aktualnie optymalna ścieżka
+    vector<int> path;
+
+    // najmniejszy znaleziony koszt
+    int bestCost;
+
 
     // limit iteracji
     int iterationsLimit;
 
-    // współczynnik chłodzenia
-    double cooling;
-
     // typ sąsiedztwa
     int neighborhoodType;
 
-public:
 
-    SimulatedAnnealing();
-    ~SimulatedAnnealing();
+    // obliczanie drogi
+    int route(vector<int> &currentPath);
 
-    void setOptimum(int opt);
+    // losowanie kolejności miast
+    void permutation(vector<int> &currentPath);
 
-    //wyliczenie czasu końcowego
-    double stop();
-    //ustawienie danych potrzebnych do mierzenia czasu
-    void start();
-
-    vector<vector<int>> matrix;
-
-    //obliczanie drogi pomiędzy miastami
-    int route(vector<int> &perm);
-
-    //losowanie
-    void permutation(vector<int> &perm);
-
-    //prawdopodobienstwo wybrania sasiedniego miasta
+    // prawdopodobienstwo wybrania sasiedniego miasta
     bool probability(int length1, int length2, double temperature);
 
-    //algorytm symulowanego wyrzazania
-    int algorithmSimulatedAnnealing(vector<vector<int>> matrix1, vector<int> &bestPath);
 
-    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, time_t stopTime, int iterationsLimit, double cooling, int neighborhoodType);
+public:
+
+    // konstruktor
+    SimulatedAnnealing();
+
+    // destruktor
+    ~SimulatedAnnealing();
+
+    // algorytm Simulated Annealing
+    int algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<int> &bestPath);
+
+    // ustawienia Simulated Annealing
+    void settingsSimulatedAnnealing(double initialTemperature, double minTemperature, time_t stopTime, int iterationsLimit, int neighborhoodType);
 };
 
 

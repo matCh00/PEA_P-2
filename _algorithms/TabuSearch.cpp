@@ -161,8 +161,8 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
     bestRoute = route;
     currentRoute = bestRoute;
 
-    Timer onboardClock;
-    onboardClock.start();
+    Timer timer;
+    timer.start();
 
 
     bool continuing = true;
@@ -214,10 +214,9 @@ int TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<u
         counter++;
         iterWithoutImprovement++;
 
-        onboardClock.stop();
 
         //-----sprawdzenie czy uplynal czas------
-        if (onboardClock.read() > stopTime)
+        if (timer.stop() > stopTime)
             continuing = false;
 
         //-----w razie znalezienie globalnego optimum intensyfikacja------

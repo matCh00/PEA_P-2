@@ -54,12 +54,13 @@ void Menu::startMenu() {
             case 4:
                 if (graph != nullptr) {
 
-                    double initTemp = 50.0; // początkowa temperatura
-                    double minTemp = 0.00001;   // minimalna temperatura
-                    time_t time = 10;             // czas wykonywania
+                    double maxTemp = 2600.0;    // początkowa temperatura
+                    double minTemp = 1.00079;   // minimalna temperatura
+                    time_t time = 10;           // czas wykonywania
+
                     int iter = 1000;          // liczba iteracji
-                    double cooling = 0.99;    // współczynnik chłodzenia
                     int types = 0;            // rodzaj sasiedztwa
+
                     int choose;
                     bool loop = true;
 
@@ -78,11 +79,11 @@ void Menu::startMenu() {
                         else if (choose == 1) {
 
                             int x;
-                            cout << "1-poczatkowa temp, 2-min temp, 3-iteracje, 4-chlodzenie, 5-sasiedztwo, 6-czas  ";
+                            cout << "1-max temp, 2-min temp, 3-czas, 4-iteracje, 5-sasiedztwo";
                             cin >> x;
 
                             if (x == 1) {
-                                cout << "poczatkowa temperatura: "; cin >> initTemp;
+                                cout << "poczatkowa temperatura: "; cin >> maxTemp;
                             }
 
                             else if (x == 2) {
@@ -90,19 +91,15 @@ void Menu::startMenu() {
                             }
 
                             else if (x == 3) {
-                                cout << "liczba iteracji: "; cin >> iter;
+                                cout << "czas [s]: "; cin >> time;
                             }
 
                             else if (x == 4) {
-                                cout << "wspolczynnik chlodzenia: "; cin >> cooling;
+                                cout << "limit iteracji: "; cin >> iter;
                             }
 
                             else if (x == 5) {
                                 cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
-                            }
-
-                            else if (x == 6) {
-                                cout << "czas [s]: "; cin >> time;
                             }
 
                             cout << endl;
@@ -116,7 +113,7 @@ void Menu::startMenu() {
                             path.resize(graph->getSize() + 1);
                             int cost;
 
-                            sa->settingsSimulatedAnnealing(initTemp, minTemp, time, iter, cooling, types);
+                            sa->settingsSimulatedAnnealing(maxTemp, minTemp, time, iter, types);
                             cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
 
                             cout << "\nKoszt: " << cost << endl;

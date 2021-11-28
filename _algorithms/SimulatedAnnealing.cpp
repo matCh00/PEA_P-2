@@ -13,96 +13,67 @@ SimulatedAnnealing::~SimulatedAnnealing() {
 
 
 // TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
-// TODO skopiować od madarasza
-void SimulatedAnnealing::settingsSimulatedAnnealing(double initialTemperature, double minTemperature, time_t stopTime, int iterationsLimit, double cooling, int neighborhoodType) {
+// TODO dodać limit iteracji i typy sąsiedztwa na podstawie koks projektu
+void SimulatedAnnealing::settingsSimulatedAnnealing(double maxTemperature, double minTemperature, time_t executionTime, int iterationsLimit, int neighborhoodType) {
 
-    this->initialTemperature = initialTemperature;
+    this->maxTemperature = maxTemperature;
     this->minTemperature = minTemperature;
-    this->stopTime = stopTime;
+    this->executionTime = executionTime;
+
     this->iterationsLimit = iterationsLimit;
-    this->cooling = cooling;
     this->neighborhoodType = neighborhoodType;
 }
 
 
 
-void SimulatedAnnealing::start()
-{
-    LARGE_INTEGER l_int;
-
-    QueryPerformanceFrequency(&l_int);
-    frequency = double(l_int.QuadPart);
-
-    QueryPerformanceCounter(&l_int);
-    counter = l_int.QuadPart;
-}
-
-void SimulatedAnnealing::setOptimum(int opt)
-{
-    optimum = opt;
-}
-
-double SimulatedAnnealing::stop()
-{
-    LARGE_INTEGER l_int;
-    QueryPerformanceCounter(&l_int);
-    return double(l_int.QuadPart - counter) / frequency;
-}
-
-int SimulatedAnnealing::route(vector<int> &permutation) {
+int SimulatedAnnealing::route(vector<int> &currentPath) {
 
     int cost = 0;
 
-    //zliczanie drogi calkowitej dla danej permutacji
-    for (int i = 0; i < cities - 1; i++) {
-        cost += matrix[permutation[i]][permutation[i + 1]];
+    // zliczanie drogi dla danego zbioru wierzchołków
+    for (int i = 0; i < matrixSize - 1; i++) {
+        cost += matrix[currentPath[i]][currentPath[i + 1]];
     }
 
-    //droga od ostatniego do pierwszego miasta
-    cost += matrix[permutation[cities - 1]][permutation[0]];
+    // dodanie drogi z ostatniego wierzchołka do pierwszego
+    cost += matrix[currentPath[matrixSize - 1]][currentPath[0]];
 
     return cost;
 }
 
-//tworzenie permutacji
-void SimulatedAnnealing::permutation(vector<int> &perm) {
+
+
+void SimulatedAnnealing::permutation(vector<int> &currentPath) {
 
     vector<int> num;
-    num.resize(cities);
+    num.resize(matrixSize);
 
     int random;
 
-    for (int i = 0; i < cities; i++)
-    {
+    for (int i = 0; i < matrixSize; i++) {
         num[i] = i;
     }
 
+    for (int i = matrixSize; i > 0; i--) {
 
-    for (int i = cities; i > 0; i--)
-    {
-        random = rand() % i; //losuje jedno miasto
-        perm[i - 1] = num[random];
+        // losowanie jednego miasta
+        random = rand() % i;
+        currentPath[i - 1] = num[random];
         num[random] = num[i - 1];
     }
 
-    for (int i = 0; i < cities; i++)
-    {
-        if (perm[i] == 0) {
-            auto temp = perm[0];
-            perm[0] = 0;
-            perm[i] = temp;
+    for (int i = 0; i < matrixSize; i++) {
+
+        // po losowaniu ustawienie początkowego miasta jako 0
+        if (currentPath[i] == 0) {
+
+            auto temp = currentPath[0];
+            currentPath[0] = 0;
+            currentPath[i] = temp;
         }
     }
 
-
-//    for (int i = 0; i < cities; i++)
-//    {
-//        cout<<perm[i]<<"  ";
-//    }cout<<endl;
-
     num.clear();
-
-
 
 //    Randomize r;
 //
@@ -110,8 +81,8 @@ void SimulatedAnnealing::permutation(vector<int> &perm) {
 //
 //    if (neighborhoodType == 1) { //swap
 //        do {
-//            i = r.random_engine(1, cities - 2);
-//            j = r.random_engine(1, cities - 2);
+//            i = r.random_engine(1, matrixSize - 2);
+//            j = r.random_engine(1, matrixSize - 2);
 //        } while (i == j || j < i);
 //
 //        unsigned buffer = perm.at(j);
@@ -122,8 +93,8 @@ void SimulatedAnnealing::permutation(vector<int> &perm) {
 //
 //    else if (neighborhoodType == 0) {
 //        do {
-//            i = r.random_engine(1, cities - 2);
-//            j = r.random_engine(1, cities - 2);
+//            i = r.random_engine(1, matrixSize - 2);
+//            j = r.random_engine(1, matrixSize - 2);
 //        } while (i == j || j < i);
 //
 //        reverse(perm.begin() + i, perm.begin() + j + 1);
@@ -132,124 +103,116 @@ void SimulatedAnnealing::permutation(vector<int> &perm) {
 
 
 
-bool SimulatedAnnealing::probability(int length, int length1, double temperature) {
+bool SimulatedAnnealing::probability(int length1, int length2, double temperature) {
 
-    double p = pow(e, ((-1 * ((long long)length1 - (long long)length)) / temperature));
+    double e = 2.718281828459;
 
-    double r = (double)rand() / RAND_MAX; // wybieramy cyfr� z przedzia�u <0,1>
+    // prawdopodobieństwo
+    double p = pow(e, ((-1 * ((long long)length2 - (long long)length1)) / temperature));
 
-    return (r < p); //jezeli prawdopodobienstwo ze wzoru jest wieksze od losowo wybranej liczby z przedzialu<0,1>
+    // wybranie liczby z przedziału <0,1>
+    double r = (double)rand() / RAND_MAX;
 
+    // jezeli prawdopodobienstwo ze wzoru jest wieksze od losowo wybranej liczby
+    return (r < p);
 }
 
-int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> matrix1, vector<int> &bestPath) {
 
-    matrix = matrix1;
-    cities = matrix1.size();
 
-    int solution = INT_MAX;
+int SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> originalMatrix, vector<int> &bestPath) {
 
-    start();
+    Timer timer;
+
+    // wartości początkowe
+    bestCost = INT_MAX;
+    matrix = originalMatrix;
+    matrixSize = originalMatrix.size();
+
+    int vertex1, vertex2;
+    double cost1, cost2;
 
     vector<int> permutation1;
-    permutation1.resize(cities);
+    permutation1.resize(matrixSize);
 
     vector<int> permutation2;
-    permutation2.resize(cities);
+    permutation2.resize(matrixSize);
 
-    int oldOptimum = 0;
-    int city1, city2;
-    double temperature, delta_max = 0, delta, cost1, cost2;;
+    // zaczynamy od maxymalnej temperatury
+    currentTemperature = maxTemperature;
 
 
-    for (int i = 0; i < cities; i++)
-    {
-        permutation(permutation1);
-        permutation(permutation2);
-        delta = abs(route(permutation1) - route(permutation2));
-        if (delta > delta_max)
-        {
-            delta_max = delta;
-        }
+    // rozpoczęcie mierzenia czasu
+    timer.start();
 
-        permutation1.clear();
-        permutation2.clear();
-
-        permutation1.resize(cities);
-        permutation2.resize(cities);
-    }
-
-    temperature = delta_max;
-
-    //tworze permutacje i obliczam koszt drogi dla niej
+    // pierwsza permutacja miast i jej koszt
     permutation(permutation1);
     cost1 = route(permutation1);
 
-    //tworze zapasowa tablice permutacja2
-    for (int i = 0; i < cities; i++)
-    {
-        permutation2[i] = permutation1[i];
-    }
-
-    std::time_t finish;
-    std::time_t start1 = std::time(NULL);
-
-    finish = start1 + stopTime;
-
-    int counter = 0;;
-
-    while (temperature > min_temperature && start1<finish )
-    {
-        counter++;
-        do
-        {
-            //losowanie 2 nowych miast do zamiany w permutacji
-            city1 = rand() % cities;
-            city2 = rand() % cities;
-
-        } while (city1 == city2 || city1 == 0 || city2 == 0);//petla wykonuje sie dopoki miasta nie beda rozne
-
-        //zamiana miast
-        permutation2[city2] = permutation1[city1];
-        permutation2[city1] = permutation1[city2];
+    // zapasowa permutacja
+    permutation2 = permutation1;
 
 
+    time_t finishTime;
+    time_t startTime = time(NULL);
+    finishTime = startTime + executionTime;
+
+    // wykonywanie przez określony czas lub do osiągnięcia minimalnej temperatury
+    while (currentTemperature > minTemperature && startTime < finishTime) {
+
+        do {
+            // losowanie 2 miast (różnych i nierównych 0)
+            vertex1 = rand() % matrixSize;
+            vertex2 = rand() % matrixSize;
+
+        } while (vertex1 == vertex2 || vertex1 == 0 || vertex2 == 0);
+
+        // zamiana miast
+        permutation2[vertex2] = permutation1[vertex1];
+        permutation2[vertex1] = permutation1[vertex2];
+
+        // koszt nowej permutacji miast
         cost2 = route(permutation2);
 
-        if (cost2 <= cost1 || probability(cost1, cost2, temperature))
-        {
-            cost1 = cost2;//
-            if (cost1 <= solution)
-            {
-                solution = cost1;
+        // jeżeli jest lepszy od poprzedniej lub prawdopodobieństwo == true
+        if (cost2 <= cost1 || probability(cost1, cost2, currentTemperature)) {
+
+            // nowe minimum lokalne
+            cost1 = cost2;
+
+            // jeżeli jest mniejsze od minimum globalnego
+            if (cost1 <= bestCost) {
+
+                bestCost = cost1;
                 path = permutation2;
             }
 
-            permutation1[city1] = permutation2[city1]; //koszt dla permutacji 2 by� wi�kszy wi�c staje sie "lepsza" permutacja
-            permutation1[city2] = permutation2[city2];
+            // przepisanie lepszej permutacji
+            permutation1[vertex1] = permutation2[vertex1];
+            permutation1[vertex2] = permutation2[vertex2];
         }
-        else
-        {
-            permutation2[city1] = permutation1[city1];
-            permutation2[city2] = permutation1[city2];
+        else {
+
+            permutation2[vertex1] = permutation1[vertex1];
+            permutation2[vertex2] = permutation1[vertex2];
         }
 
-        double delta_min = pow(delta_max, 0.0001);
+        // beta
+        double beta = (maxTemperature - minTemperature) / (10000000 * maxTemperature * minTemperature);
 
-        double beta = (delta_max - delta_min) / (100000 * delta_max*delta_min);
+        // zmiana temperatury
+        currentTemperature = (currentTemperature / (1 + beta * currentTemperature));
 
-        temperature = (temperature/(1+beta*temperature));
-
-        start1 = std::time(NULL);
-        stop();
+        startTime = time(NULL);
+        timer.stop();
     }
 
-
+    // dodanie początkowego wierzchołka na koniec cyklu
     path.push_back(0);
-    bestPath = path;
 
     permutation1.clear();
     permutation2.clear();
 
-    return solution;
+    // zwrócenie wyników
+    bestPath = path;
+    return bestCost;
 }

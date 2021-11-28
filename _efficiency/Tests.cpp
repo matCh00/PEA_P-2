@@ -30,12 +30,10 @@ void Tests::SA() {
 
     // parametry SA
     vector<double> initTemp = {10.0, 100.0, 1000.0};  // początkowa temperatura
-    vector<double> minTemp = {0.001, 0.0000001};            // minimalna temperatura
+    vector<double> minTemp = {0.001, 0.0000001};      // minimalna temperatura
     vector<time_t> timeSA = {3, 10};                  // czas wykonania
-    vector<int> iterSA = {5, 100};                // liczba iteracji
-    vector<double> cooling = {0.999};          // współczynnik chłodzenia
-    vector<int> typesSA = {0, 1};              // rodzaj sasiedztwa
-
+    vector<int> iterSA = {5, 100};                    // liczba iteracji
+    vector<int> typesSA = {0, 1};                     // rodzaj sasiedztwa
 
 
     // SA
@@ -64,17 +62,13 @@ void Tests::SA() {
 
                     for (int k = 0; k < iterSA.size(); k++) {
 
-                        for (int l = 0; l < cooling.size(); l++) {
+                        for (int m = 0; m < typesSA.size(); m++) {
 
-                            for (int m = 0; m < typesSA.size(); m++) {
+                            sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n], iterSA[k], typesSA[m]);
+                            cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
 
-                                sa->settingsSimulatedAnnealing(initTemp[i], minTemp[j], timeSA[n], iterSA[k], cooling[l], typesSA[m]);
-                                cost = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path);
-
-                                file << "SA:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  początkowa temp: " << initTemp[i] <<
-                                "  minimalna temp: " << minTemp[j] << "czas: " << timeSA[n] << "  iter: " << iterSA[k] << "  cooling: " << cooling[l] <<
-                                "  sasiedztwo: " << typesSA[m] << endl;
-                            }
+                            file << "SA:  rozmiar: " << graph->getSize() << " koszt: " << cost << "  max temp: " << initTemp[i] <<
+                            "  min temp: " << minTemp[j] << "czas: " << timeSA[n] << "  iteracje: " << iterSA[k] <<"  sasiedztwo: " << typesSA[m] << endl;
                         }
                     }
                 }
@@ -86,7 +80,6 @@ void Tests::SA() {
     minTemp.clear();
     iterSA.clear();
     timeSA.clear();
-    cooling.clear();
     typesSA.clear();
 }
 
@@ -143,7 +136,7 @@ void Tests::TS() {
                                     ts->settingsTabuSearch(cadence[i], timeTS[j], divCad[k], randNodes[l], typesTS[m], diversification[n], iterTS[p]);
                                     cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
 
-                                    file << "TS:  rozmiar: " << graph->getSize() << " znalezione optimum: " << cost << "  kadencja: " << cadence[i] <<
+                                    file << "TS:  rozmiar: " << graph->getSize() << " koszt: " << cost << "  kadencja: " << cadence[i] <<
                                     "  czas: " << timeTS[j] << "  div: " << divCad[k] << "  nodes: " << randNodes[l] << "  sasiedztwo: " << typesTS[m] <<
                                     "  czy dywersyfikacja: " << diversification[n] << "  iter: " << iterTS[p] << endl;
                                 }

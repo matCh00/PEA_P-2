@@ -16,20 +16,20 @@ Timer::~Timer() {
 
 void Timer::start() {
 
-    tstart = steady_clock::now();
+    LARGE_INTEGER l_int;
+
+    QueryPerformanceFrequency(&l_int);
+    frequency = double(l_int.QuadPart);
+
+    QueryPerformanceCounter(&l_int);
+    counter = l_int.QuadPart;
 }
 
 
 
-void Timer::stop() {
+double Timer::stop() {
 
-    tstop = steady_clock::now();
-    measurement = tstop - tstart;
-}
-
-
-
-double Timer::read() {
-
-    return measurement.count();
+    LARGE_INTEGER l_int;
+    QueryPerformanceCounter(&l_int);
+    return double(l_int.QuadPart - counter) / frequency;
 }
