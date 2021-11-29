@@ -18,7 +18,7 @@ private:
     int cadence;
 
     // czas działania algorytmu
-    time_t stopTime;
+    time_t executionTime;
 
     // dzielnik kadencji - liczba przez którą jest dzielona kadencja w wrazie znalezienia globalnego minimum (INTENSYFIKACJA)
     int divCadence;
@@ -51,26 +51,17 @@ private:
     // lista ostatnio wykonanych ruchów
     vector<vector<int>> tabuList;
 
-    // generowanie początkowej ścieżki i zwrócenie lokalnego minimum
+    // znalezienie lokalnego minimum i jego ścieżki
     // algorytm zachłanny nie dokonuje oceny czy w kolejnych krokach jest sens wykonywać dane działanie
     // dokonuje decyzji lokalnie optymalnej, kontynuując rozwiązanie podproblemu wynikającego z podjętej decyzji
-    int getInitialGreedy(vector<int> &route);
+    int findLocalMinimum(vector<int> &route);
 
-    // generowanie ścieżki i zwrócenie lokalnego minimum
-    int getInitialGreedyAndRandom(vector<int> &route);
+    // szukanie najlepszego sąsiada
+    // odwrócenie części ścieżki   reverse(4,1): <0,3,4,2,5,1,0> -> <0,3,1,5,2,4,0>
+    int bestNeighborhood(int &bestI, int &bestJ, vector<int> &currentRoute);
 
-    // wyczyszczenie listy tabu
-    void cleanTabuList();
-
-    // przeszukiwanie sąsiedztwa
-    // odwrócenie kolejnosci między wierzchołkami   reverse(4,1): <0,3,4,2,5,1,0> -> <0,3,1,5,2,4,0>
-    int getBestNeighborhoodReverse(int &bestI, int &bestJ, vector<int> &currentRoute);
-
-    // odwrócenie kolejności
-    void reverseVector(int a, int b, vector<int> &currentRoute);
-
-    // sprawdzenie kosztu
-    int calculateReverse(int i, int j, vector<int> &currentRoute);
+    // obliczenie kosztu ścieżki
+    int calculateAfterReverse(int i, int j, vector<int> &currentRoute);
 
 
 public:

@@ -24,9 +24,9 @@ void Menu::startMenu() {
     // defaultowe ustawienia algorytmu
     maxTemp = 2600.0;
     minTemp = 1.00079;
-    timeSA = 10;
+    timeSA = 5;
     cadence = 120;
-    timeTS = 2;
+    timeTS = 5;
     divCadence = 9;
 
     // instancja grafu
@@ -36,9 +36,8 @@ void Menu::startMenu() {
     while (run) {
 
         cout << "\n [1] - wczytaj dane z pliku \n"
-                " [2] - wyswietl graf \n"
-                "  [4] - algorytm SA - symulowane wyzarzanie \n"
-                "  [5] - algorytm TS - tabu search \n"
+                "  [2] - algorytm SA - symulowane wyzarzanie \n"
+                "  [3] - algorytm TS - tabu search \n"
                 " [9] - pomiary automatyczne \n"
                 " [0] - wyjscie \n";
 
@@ -48,17 +47,12 @@ void Menu::startMenu() {
         switch (key) {
 
             case 1:
-                cout << "podaj nazwe pliku: ";      // C:\Users\matic\Desktop\br17.atsp  C:\Users\matic\Desktop\ftv170.atsp
+                cout << "podaj nazwe pliku wraz z rozszerzeniem: ";      // C:\Users\matic\Desktop\br17.atsp  C:\Users\matic\Desktop\ftv170.atsp
                 cin >> name;
                 graph = new Graph(name);
                 break;
 
             case 2:
-                cout << "graf w postaci macierzy sasiedztwa: \n";
-                graph->display();
-                break;
-
-            case 4:
                 if (graph != nullptr) {
 
                     int choose;
@@ -132,7 +126,7 @@ void Menu::startMenu() {
                 }
                 break;
 
-            case 5:
+            case 3:
                 if (graph != nullptr) {
 
                     int choose;

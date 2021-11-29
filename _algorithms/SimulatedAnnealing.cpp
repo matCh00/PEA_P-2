@@ -118,12 +118,9 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
     // zapasowa permutacja
     permutation2 = permutation1;
 
-    time_t finishTime;
-    time_t startTime = time(NULL);
-    finishTime = startTime + executionTime;
 
     // wykonywanie przez określony czas lub do osiągnięcia minimalnej temperatury
-    while (currentTemperature > minTemperature && startTime < finishTime) {
+    while (currentTemperature > minTemperature && timer.stop() < executionTime) {
 
         do {
             // losowanie 2 miast (różnych i nierównych 0)
@@ -166,9 +163,6 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
 
         // zmiana temperatury
         currentTemperature = (currentTemperature / (1 + beta * currentTemperature));
-
-        startTime = time(NULL);
-        timer.stop();
     }
 
     // dodanie początkowego wierzchołka na koniec cyklu
