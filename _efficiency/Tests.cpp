@@ -78,17 +78,14 @@ void Tests::SA() {
 void Tests::TS() {
 
     Graph *graph;
-    vector<unsigned int> path;
+    vector<int> path;
     int cost;
+    double exeTime;
 
     // parametry TS
-    vector<int> cadence = {40, 120};        // kadencja
-    vector<time_t> timeTS = {3};               // czas wykonania
-    vector<int> divCad = {9};               // dzielnik kadencji (intensyfikacja)
-    vector<int> randNodes = {5};            // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
-    vector<int> typesTS = {0};           // rodzaj sasiedztwa
-    vector<int> iterTS = {5000};            // limit iteracji bez poprawy
-    vector<bool> diversification = {true};  // dywersyfikacja
+    vector<int> cadence = {40, 120};
+    vector<int> divCad = {9};
+    vector<time_t> timeTS = {3};
 
 
     // TS
@@ -111,28 +108,15 @@ void Tests::TS() {
 
         for (int i = 0; i < cadence.size(); i++) {
 
-            for (int j = 0; j < timeTS.size(); j++) {
+            for (int j = 0; j < divCad.size(); j++) {
 
-                for (int k = 0; k < divCad.size(); k++) {
+                for (int k = 0; k < timeTS.size(); k++) {
 
-                    for (int l = 0; l < randNodes.size(); l++) {
+                    ts->settingsTabuSearch(cadence[i], divCad[j], timeTS[k]);
+                    exeTime = ts->algorithmTabuSearch(graph->getMatrix(), path, cost);
 
-                        for (int m = 0; m < typesTS.size(); m++) {
-
-                            for (int n = 0; n < diversification.size(); n++) {
-
-                                for (int p = 0; p < iterTS.size(); p++) {
-
-                                    ts->settingsTabuSearch(cadence[i], timeTS[j], divCad[k], randNodes[l], typesTS[m], diversification[n], iterTS[p]);
-                                    cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
-
-                                    file << "TS:  rozmiar: " << graph->getSize() << " koszt: " << cost << "  kadencja: " << cadence[i] <<
-                                    "  czas: " << timeTS[j] << "  div: " << divCad[k] << "  nodes: " << randNodes[l] << "  sasiedztwo: " << typesTS[m] <<
-                                    "  czy dywersyfikacja: " << diversification[n] << "  iter: " << iterTS[p] << endl;
-                                }
-                            }
-                        }
-                    }
+                    file << "TS:  rozmiar: " << graph->getSize() << " koszt: " << cost << " czas wykonania: " << exeTime <<
+                    "  kadencja: " << cadence[i] << "  div: " << divCad[k] << "  czas: " << timeTS[j] <<endl;
                 }
             }
         }
@@ -141,10 +125,6 @@ void Tests::TS() {
     cadence.clear();
     timeTS.clear();
     divCad.clear();
-    randNodes.clear();
-    typesTS.clear();
-    diversification.clear();
-    iterTS.clear();
 }
 
 

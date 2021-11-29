@@ -21,6 +21,13 @@ void Menu::startMenu() {
     bool run = true;
     string name;
 
+    // defaultowe ustawienia algorytmu
+    maxTemp = 2600.0;
+    minTemp = 1.00079;
+    timeSA = 10;
+    cadence = 120;
+    timeTS = 2;
+    divCadence = 9;
 
     // instancja grafu
     graph = new Graph();
@@ -54,10 +61,6 @@ void Menu::startMenu() {
             case 4:
                 if (graph != nullptr) {
 
-                    double maxTemp = 2600.0;    // początkowa temperatura
-                    double minTemp = 1.00079;   // minimalna temperatura
-                    time_t time = 10;           // czas wykonywania
-
                     int choose;
                     bool loop = true;
 
@@ -78,13 +81,13 @@ void Menu::startMenu() {
 
                             cout << " poczatkowa temperatura: " << maxTemp <<
                                     "\n minimalna temperatura: " << minTemp <<
-                                    "\n czas [s]: " << time << endl << endl;
+                                    "\n czas [s]: " << timeSA << endl << endl;
                         }
 
                         else if (choose == 2) {
 
                             int x;
-                            cout << "1) max temp, 2) min temp, 3) czas";
+                            cout << "1) max temp, 2) min temp, 3) czas  ";
                             cin >> x;
 
                             if (x == 1) {
@@ -96,7 +99,7 @@ void Menu::startMenu() {
                             }
 
                             else if (x == 3) {
-                                cout << "czas [s]: "; cin >> time;
+                                cout << "czas [s]: "; cin >> timeSA;
                             }
 
                             cout << endl;
@@ -110,7 +113,7 @@ void Menu::startMenu() {
                             int cost;
                             double exeTime;
 
-                            sa->settingsSimulatedAnnealing(maxTemp, minTemp, time);
+                            sa->settingsSimulatedAnnealing(maxTemp, minTemp, timeSA);
                             exeTime = sa->algorithmSimulatedAnnealing(graph->getMatrix(), path, cost);
 
                             cout << "\nCzas: " << exeTime << " s" << endl;
@@ -132,20 +135,14 @@ void Menu::startMenu() {
             case 5:
                 if (graph != nullptr) {
 
-                    int cadence = 120;           // kadencja
-                    time_t time = 2;                // czas wykonania
-                    int divCad = 9;              // dzielnik kadencji (intensyfikacja)
-                    int randNodes = 5;           // liczba poczatkowych losowych wierzcholkow przy generowaniu nowej sciezki
-                    int types = 0;               // rodzaj sasiedztwa
-                    int iter = 5000 ;            // limit iteracji bez poprawy
-                    bool diversification = true; // dywersyfikacja
                     int choose;
                     bool loop = true;
 
                     while (loop) {
 
-                        cout << " [1] - ustaw parametry\n"
-                                " [2] - rozpocznij algorytm\n"
+                        cout << " [1] - pokaz parametry\n"
+                                " [2] - ustaw parametry\n"
+                                " [3] - rozpocznij algorytm\n"
                                 " [0] - wyjdz\n" << endl;
                         cin >> choose;
 
@@ -156,8 +153,15 @@ void Menu::startMenu() {
 
                         else if (choose == 1) {
 
+                            cout << " kadencja: " << cadence <<
+                                 "\n dzielnik kadencji: " << divCadence <<
+                                 "\n czas [s]: " << timeTS << endl << endl;
+                        }
+
+                        else if (choose == 2) {
+
                             int x;
-                            cout << "1-kadencja, 2-czas, 3-dzielnik, 4-wierzcholki, 5-sasiedztwo, 6-dywersyfikacja, 7-iteracje  ";
+                            cout << "1) kadencja, 2) dzielnik, 3) czas  ";
                             cin >> x;
 
                             if (x == 1) {
@@ -165,44 +169,29 @@ void Menu::startMenu() {
                             }
 
                             else if (x == 2) {
-                                cout << "czas [s]: "; cin >> time;
+                                cout << "dzielnik kadencji: "; cin >> divCadence;
                             }
 
                             else if (x == 3) {
-                                cout << "dzielnik kadencji: "; cin >> divCad;
-                            }
-
-                            else if (x == 4) {
-                                cout << "wierzcholki: "; cin >> randNodes;
-                            }
-
-                            else if (x == 5) {
-                                cout << "sasiedztwo: 0-reverse, 1-swap "; cin >> types;
-                            }
-
-                            else if (x == 6) {
-                                cout << "dywersyfikacja: true/false"; cin >> diversification;
-                            }
-
-                            else if (x == 7) {
-                                cout << "iteracje: "; cin >> iter;
+                                cout << "czas [s]: "; cin >> timeTS;
                             }
 
                             cout << endl;
                         }
 
-                        else if (choose == 2) {
+                        else if (choose == 3) {
 
                             TabuSearch *ts = new TabuSearch();
 
-                            vector<unsigned int> path;
-                            path.resize(graph->getSize() + 1);
+                            vector<int> path(graph->getSize() + 1);
                             int cost;
+                            double exeTime;
 
-                            ts->settingsTabuSearch(cadence, time, divCad, randNodes, types, diversification, iter);
-                            cost = ts->algorithmTabuSearch(graph->getMatrix(), path);
+                            ts->settingsTabuSearch(cadence, divCadence, timeTS);
+                            exeTime = ts->algorithmTabuSearch(graph->getMatrix(), path, cost);
 
-                            cout << "\nKoszt: " << cost << endl;
+                            cout << "\nCzas: " << exeTime << " s" << endl;
+                            cout << "Koszt: " << cost << endl;
                             cout << "Sciezka: " ;
                             for (int i = 0; i < graph->getSize(); i++)
                                 cout << path[i] << " -> ";

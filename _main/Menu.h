@@ -16,6 +16,24 @@ private:
     // graf
     Graph* graph;
 
+    // początkowa temperatura
+    double maxTemp;
+
+    // minimalna temperatura
+    double minTemp;
+
+    // czas wykonywania
+    time_t timeSA;
+
+    // kadencja
+    int cadence;
+
+    // dzielnik kadencji (intensyfikacja)
+    int divCadence;
+
+    // czas wykonania
+    time_t timeTS;
+
 
 public:
 
