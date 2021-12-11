@@ -12,7 +12,15 @@ SimulatedAnnealing::~SimulatedAnnealing() {
 }
 
 
-// TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
+/*
+ * Algorytm symulowanego wyżarzania
+ * Algorytm rozpoczyna działanie od temperatury początkowej. W trakcie działania, stopniowo obniżana jest temperatura.
+ * Algorytm zaczyna od pewnego rozwiązania początkowego i w kolejnych iteracjach zamienia miejscami losowe elementy trasy.
+ * Jeśli po zamianie, trasa jest lepsza – krótsza, zostaje ona zapisana jako dotychczasowo najlepsza, jeśli nie,
+ * odrzucamy ją i wykonujemy zamianę elementów ponownie. Aby podczas tych zamian, algorytm nie utknął w minimum lokalnym,
+ * dopuszczane jest także przyjęcie z pewnym prawdopodobieństwem gorszego od dotychczas najlepszego rozwiązania.
+ */
+
 void SimulatedAnnealing::settingsSimulatedAnnealing(double maxTemperature, double minTemperature, time_t executionTime) {
 
     this->maxTemperature = maxTemperature;
@@ -22,7 +30,7 @@ void SimulatedAnnealing::settingsSimulatedAnnealing(double maxTemperature, doubl
 
 
 
-int SimulatedAnnealing::route(vector<int> &currentPath) {
+int SimulatedAnnealing::calculateCost(vector<int> &currentPath) {
 
     int cost = 0;
 
@@ -39,28 +47,26 @@ int SimulatedAnnealing::route(vector<int> &currentPath) {
 
 
 
-void SimulatedAnnealing::permutation(vector<int> &currentPath) {
+void SimulatedAnnealing::shufflePath(vector<int> &currentPath) {
 
-    // pomocnicza tablica
+    auto rng = std::default_random_engine {};
+
+    // pomocnicza ścieżka
     vector<int> num;
     num.resize(matrixSize);
-
-    int random;
 
     // wypełnienie wektora
     iota(num.begin(), num.end(), 0);
 
-    for (int i = matrixSize; i > 0; i--) {
+    // przetasowanie ścieżki
+    shuffle(begin(num), end(num), rng);
 
-        // losowanie jednego miasta
-        random = rand() % i;
-        currentPath[i - 1] = num[random];
-        num[random] = num[i - 1];
-    }
+    // przypisanie (bez pomocniczej ścieżki były błędy)
+    currentPath = num;
 
     for (int i = 0; i < matrixSize; i++) {
 
-        // po losowaniu ustawienie początkowego miasta jako 0
+        // ustawienie początkowego miasta jako 0 po przetasownaiu
         if (currentPath[i] == 0) {
 
             auto temp = currentPath[0];
@@ -108,12 +114,12 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
     vector<int> permutation1(matrixSize);
     vector<int> permutation2(matrixSize);
 
-    // zaczynamy od maxymalnej temperatury
+    // zaczynamy od maksymalnej temperatury
     currentTemperature = maxTemperature;
 
     // pierwsza permutacja miast i jej koszt
-    permutation(permutation1);
-    cost1 = route(permutation1);
+    shufflePath(permutation1);
+    cost1 = calculateCost(permutation1);
 
     // zapasowa permutacja
     permutation2 = permutation1;
@@ -134,7 +140,7 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
         permutation2[vertex1] = permutation1[vertex2];
 
         // koszt nowej permutacji miast
-        cost2 = route(permutation2);
+        cost2 = calculateCost(permutation2);
 
         // jeżeli jest lepszy od poprzedniej lub prawdopodobieństwo == true
         if (cost2 <= cost1 || probability(cost1, cost2, currentTemperature)) {
@@ -154,6 +160,7 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
             permutation1[vertex2] = permutation2[vertex2];
         }
         else {
+            // przepisanie aktualnej permutacji
             permutation2[vertex1] = permutation1[vertex1];
             permutation2[vertex2] = permutation1[vertex2];
         }

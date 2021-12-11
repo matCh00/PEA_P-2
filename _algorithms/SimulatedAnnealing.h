@@ -1,5 +1,10 @@
 /*
- *  algorytm symulowanego wyżarzania
+ * Algorytm symulowanego wyżarzania
+ * Algorytm rozpoczyna działanie od temperatury początkowej. W trakcie działania, stopniowo obniżana jest temperatura.
+ * Algorytm zaczyna od pewnego rozwiązania początkowego i w kolejnych iteracjach zamienia miejscami losowe elementy trasy.
+ * Jeśli po zamianie, trasa jest lepsza – krótsza, zostaje ona zapisana jako dotychczasowo najlepsza, jeśli nie,
+ * odrzucamy ją i wykonujemy zamianę elementów ponownie. Aby podczas tych zamian, algorytm nie utknął w minimum lokalnym,
+ * dopuszczane jest także przyjęcie z pewnym prawdopodobieństwem gorszego od dotychczas najlepszego rozwiązania.
  */
 
 #ifndef PEA_P_2_SIMULATEDANNEALING_H
@@ -38,11 +43,11 @@ private:
     // najmniejszy znaleziony koszt
     int foundOptimum;
 
-    // obliczanie drogi
-    int route(vector<int> &currentPath);
+    // obliczanie kosztu ścieżki
+    int calculateCost(vector<int> &currentPath);
 
     // losowanie kolejności miast
-    void permutation(vector<int> &currentPath);
+    void shufflePath(vector<int> &currentPath);
 
     // prawdopodobienstwo wybrania sasiedniego miasta
     bool probability(int length1, int length2, double temperature);

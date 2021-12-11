@@ -48,7 +48,7 @@ private:
     // aktualna kadencja
     int currentTabuCadence;
 
-    // lista ostatnio wykonanych ruchów
+    // lista tabu
     vector<vector<int>> tabuList;
 
     // znalezienie lokalnego minimum i jego ścieżki
