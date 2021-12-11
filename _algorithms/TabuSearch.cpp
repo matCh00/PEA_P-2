@@ -13,28 +13,39 @@ TabuSearch::~TabuSearch() {
 }
 
 
-// TODO opisać działanie algorytmu - komentarze i ewentualnie pozmieniać nazwy
+/*
+ * Algorytm bazuje na dynamicznej zmianie sąsiedztwa danego rozwiązania i szukaniu lokalnie najlepszych rozwiązań.
+ * Podstawą algorytmu jest zapamiętywanie ruchów na liście tabu. Zapisywanie ruchów niedozwolonych w tabu pozwala na
+ * odrzucenie rozwiązań niedawno sprawdzanych, zwiększając obszar przeszukiwania, co skutkuje większą możliwością
+ * wyjścia z minimum lokalnego kosztem dokładności algorytmu.
+ */
+
 void TabuSearch::settingsTabuSearch(int cadence, int divCadence, time_t stopTime) {
 
     this->cadence = cadence;
-    this->divCadence = divCadence;
+    this->divideCadence = divCadence;
     this->executionTime = stopTime;
 }
 
 
 
-int TabuSearch::findLocalMinimum(vector<int> &route) {
+int TabuSearch::findInitialSolution(vector<int> &route) {
 
-    int localMin = 0;
-    int bestMin, tempBest = 0, oldTempBest = 0;
+    int localMinimum = 0;
+    int bestMinimum, tempBest = 0, oldTempBest;
+
+    // tablica odwiedzonych wierzchołków
     vector<int> visitedTab(matrixSize, 0);
 
     bool ifVisited;
+
+    // dla każdego wierzchołka
     for (int i = 0; i < matrixSize; i++) {
 
-        bestMin = INT_MAX;
+        bestMinimum = INT_MAX;
         oldTempBest = tempBest;
 
+        // szukamy najkorzystniejsze rozwiązanie (dla niesprawdzonych wierzchołków)
         for (int j = 0; j < matrixSize; j++) {
 
             ifVisited = true;
@@ -48,29 +59,102 @@ int TabuSearch::findLocalMinimum(vector<int> &route) {
                     }
                 }
 
-                if (matrix[oldTempBest][j] < bestMin && ifVisited == true) {
-                    bestMin = matrix[oldTempBest][j];
+                // znalezienie lokalnego minimum dla danego wierzchołka
+                if (matrix[oldTempBest][j] < bestMinimum && ifVisited == true) {
+                    bestMinimum = matrix[oldTempBest][j];
                     tempBest = j;
                 }
             }
         }
         if (i < matrixSize - 1) {
-            localMin = localMin + bestMin;
+
+            // dodajemy optymalny koszt dla danego wierzchołka
+            localMinimum = localMinimum + bestMinimum;
         }
         else {
-            localMin = localMin + matrix[oldTempBest][0];
+
+            // dodajemy koszt z ostatniego wierzchołka do pierwszego
+            localMinimum = localMinimum + matrix[oldTempBest][0];
         }
 
+        // dodajemy do ścieżki optymalny wierzchołek
         route.push_back(oldTempBest);
         visitedTab[i] = tempBest;
     }
 
+    // dodajemy na koniec ścieżki wierzchołek startowy
     route.push_back(0);
 
     visitedTab.clear();
 
-    return localMin;
+    return localMinimum;
 }
+
+
+
+int TabuSearch::searchNeighborhood(int &bestI, int &bestJ, vector<int> &currentRoute) {
+
+    int bestBalance = INT_MAX, balance;
+    bool ifTabu;
+    bestI = 0;
+    bestJ = 0;
+
+    for (int i = 1; i < matrixSize - 1; i++) {
+
+        for (int j = i + 1; j < matrixSize; j++) {
+
+            // policzenie balansu pomiędzy wierzchołkami
+            balance = calculateAfterReverse(i, j, currentRoute);
+
+            ifTabu = false;
+
+            for (int k = 0; k < tabuList.size(); k++) {
+
+                // sprawdzenie czy sąsiad nie należy do listy tabu
+                if (tabuList.at(k).at(0) == currentRoute.at(i) && tabuList.at(k).at(1) == currentRoute.at(j)) {
+                    ifTabu = true;
+                    break;
+                }
+
+                // sprawdzenie czy sąsiad nie należy do listy tabu
+                if (tabuList.at(k).at(0) == currentRoute.at(j) && tabuList.at(k).at(1) == currentRoute.at(i)) {
+                    ifTabu = true;
+                    break;
+                }
+            }
+
+            // nie zmieniamy rozwiązania jeżeli sąsiad znajduje się w liście tabu oraz
+            // nie spełnia kryterium aspiracji czyli nie prowadzi do globalnego optimum
+            if (ifTabu == true && currentOptimum + balance >= globalOptimum)
+                continue;
+
+            // uzyskanie nowego rozwiązania
+            if (balance < bestBalance) {
+                bestBalance = balance;
+                bestI = i;
+                bestJ = j;
+            }
+        }
+    }
+
+    return bestBalance;
+}
+
+
+
+int TabuSearch::calculateAfterReverse(int i, int j, vector<int> &currentRoute) {
+
+    // reverse(4,1): <0,3,4,2,5,1,0> -> <0,3,1,5,2,4,0>
+
+    int balance = matrix[currentRoute.at(i - 1)][currentRoute.at(j)] - matrix[currentRoute.at(i - 1)][currentRoute.at(i)];
+    balance = balance + matrix[currentRoute.at(i)][currentRoute.at(j + 1)] - matrix[currentRoute.at(j)][currentRoute.at(j + 1)];
+
+    for (int k = i; k < j; k++)
+        balance = balance + matrix[currentRoute.at(k + 1)][currentRoute.at(k)] - matrix[currentRoute.at(k)][currentRoute.at(k + 1)];
+
+    return balance;
+}
+
 
 
 double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vector<int> &bestPath, int &bestCost) {
@@ -89,53 +173,57 @@ double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vecto
     bestRoute.resize(matrixSize + 1);
     currentRoute.resize(matrixSize + 1);
 
-
     vector<int> route;
-    globalOptimum = findLocalMinimum(route);
+
+    // wygenerowanie początkowego rozwiązania
+    globalOptimum = findInitialSolution(route);
     bestRoute = route;
     currentRoute = bestRoute;
 
-
-    currentTabuCadence = cadence;
+    // początkowe ustawienia
+    currentCadence = cadence;
     currentOptimum = globalOptimum;
-    int bestBalance;
-    int bestI = 0, bestJ = 0;
-    int counter = 0, iterWithoutImprovement = 0;
+
+    int bestBalance, bestI = 0, bestJ = 0;
 
 
+    // wykonywanie przez określony czas
     while (timer.stop() < executionTime) {
 
         intensification = false;
+
+        // przeszukanie całego sąsiedztwa
+        bestBalance = searchNeighborhood(bestI, bestJ, currentRoute);
+
+        // dodanie elementu do listy tabu
         vector<int> currentTabu(3, 0);
-
-        currentTabu.at(2) = currentTabuCadence;
-
-        bestBalance = bestNeighborhood(bestI, bestJ, currentRoute);
         currentTabu.at(0) = currentRoute[bestI];
         currentTabu.at(1) = currentRoute[bestJ];
+        currentTabu.at(2) = currentCadence;
 
-        // odwrócenie części wektora
+        // odwrócenie części ścieżki
+        // reverse(4,1): <0,3,4,2,5,1,0> -> <0,3,1,5,2,4,0>
         reverse(currentRoute.begin() + bestI, currentRoute.begin() + bestJ + 1);
 
-
+        // szukanie nowego lokalnego optimum
         currentOptimum = currentOptimum + bestBalance;
 
         if (currentOptimum < globalOptimum) {
 
-            // wyzerowanie po znalezieniu globalnego minimum
-            iterWithoutImprovement = 0;
+            // włączenie intensyfikacji
             intensification = true;
 
-            // przypisanie optymalnyej ścieżki i kosztu
+            // przypisanie optymalnej ścieżki i kosztu
             globalOptimum = currentOptimum;
             bestRoute = currentRoute;
-
         }
 
-        // wyczyszczenie listy tabu
         for (int i = 0; i < tabuList.size(); i++) {
+
+            // dekrementacja kadencji w liście tabu
             tabuList.at(i).at(2)--;
 
+            // usunięcie ruchu z listy tabu jeżeli ich kadencja jest równa 0
             if (tabuList.at(i).at(2) == 0) {
                 tabuList.erase(tabuList.begin() + i);
                 i = i - 1;
@@ -145,13 +233,10 @@ double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vecto
         // dodanie ruchu do listy tabu
         tabuList.push_back(currentTabu);
 
-        counter++;
-        iterWithoutImprovement++;
-
-
         // intensyfikacja po znalezieniu globalnego minimum
         if (intensification == true) {
-            currentTabuCadence /= divCadence;
+
+            currentCadence /= divideCadence;
             intensification = false;
         }
     }
@@ -164,65 +249,4 @@ double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vecto
     bestCost = globalOptimum;
 
     return timer.stop();
-}
-
-
-
-int TabuSearch::bestNeighborhood(int &bestI, int &bestJ, vector<int> &currentRoute) {
-
-    int bestBalance = INT_MAX;
-    int balance;
-    bool ifTabu;
-    bestI = 0;
-    bestJ = 0;
-
-    for (int i = 1; i < matrixSize - 1; i++) {
-
-        for (int j = i + 1; j < matrixSize; j++) {
-
-            balance = calculateAfterReverse(i, j, currentRoute);
-
-            ifTabu = false;
-
-            for (int k = 0; k < tabuList.size(); k++) {
-
-                if (tabuList.at(k).at(0) == currentRoute.at(i) && tabuList.at(k).at(1) == currentRoute.at(j)) {
-                    ifTabu = true;
-                    break;
-                }
-
-                if (tabuList.at(k).at(0) == currentRoute.at(j) && tabuList.at(k).at(1) == currentRoute.at(i)) {
-                    ifTabu = true;
-                    break;
-                }
-            }
-
-            if (ifTabu == true && currentOptimum + balance >= globalOptimum)
-                continue;
-
-            if (balance < bestBalance) {
-                bestBalance = balance;
-                bestI = i;
-                bestJ = j;
-            }
-        }
-    }
-
-    return bestBalance;
-}
-
-
-
-int TabuSearch::calculateAfterReverse(int i, int j, vector<int> &currentRoute) {
-
-    int balance;
-
-    balance = 0 - matrix[currentRoute.at(i - 1)][currentRoute.at(i)] - matrix[currentRoute.at(j)][currentRoute.at(j + 1)];
-    balance = balance + matrix[currentRoute.at(i - 1)][currentRoute.at(j)] + matrix[currentRoute.at(i)][currentRoute.at(j + 1)];
-
-    for (int k = i; k < j; k++)
-        balance = balance - matrix[currentRoute.at(k)][currentRoute.at(k + 1)] +
-                  matrix[currentRoute.at(k + 1)][currentRoute.at(k)];
-
-    return balance;
 }

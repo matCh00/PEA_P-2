@@ -1,5 +1,8 @@
 /*
- *  algorytm przeszukiwania tabu
+ * Algorytm bazuje na dynamicznej zmianie sąsiedztwa danego rozwiązania i szukaniu lokalnie najlepszych rozwiązań.
+ * Podstawą algorytmu jest zapamiętywanie ruchów na liście tabu. Zapisywanie ruchów niedozwolonych w tabu pozwala na
+ * odrzucenie rozwiązań niedawno sprawdzanych zwiększając obszar przeszukiwania, co skutkuje większą możliwością
+ * wyjścia z minimum lokalnego kosztem dokładności algorytmu.
  */
 
 #ifndef PEA_P_2_TABUSEARCH_H
@@ -21,7 +24,7 @@ private:
     time_t executionTime;
 
     // dzielnik kadencji - liczba przez którą jest dzielona kadencja w wrazie znalezienia globalnego minimum (INTENSYFIKACJA)
-    int divCadence;
+    int divideCadence;
 
     // intensyfikacja - wieksza dokładność przeszukiwania (krótka kadencja)
     // duże ryzyko wpadnięcia w cykl w pobliżu lokalnego minimum
@@ -33,34 +36,36 @@ private:
     // wielkość macierzy
     int matrixSize;
 
-    // globalnie optymalna ścieżka
+    // optymalna ścieżka
     vector<int> bestRoute;
 
     // aktualna ścieżka
     vector<int> currentRoute;
 
-    // globalna funkcja celu
+    // najmniejszy znaleziony koszt
     int globalOptimum;
 
-    // lokalna funkcja celu
+    // lokalnie najmniejszy znaleziony koszt
     int currentOptimum;
 
     // aktualna kadencja
-    int currentTabuCadence;
+    int currentCadence;
 
     // lista tabu
+    // vector< wierzchołek1, wierzchołek2, kadencja >
     vector<vector<int>> tabuList;
 
-    // znalezienie lokalnego minimum i jego ścieżki
+    // znalezienie pierwszego rozwiązania
     // algorytm zachłanny nie dokonuje oceny czy w kolejnych krokach jest sens wykonywać dane działanie
     // dokonuje decyzji lokalnie optymalnej, kontynuując rozwiązanie podproblemu wynikającego z podjętej decyzji
-    int findLocalMinimum(vector<int> &route);
+    int findInitialSolution(vector<int> &route);
 
-    // szukanie najlepszego sąsiada
-    // odwrócenie części ścieżki   reverse(4,1): <0,3,4,2,5,1,0> -> <0,3,1,5,2,4,0>
-    int bestNeighborhood(int &bestI, int &bestJ, vector<int> &currentRoute);
+    // przeszukiwanie sąsiedztwa
+    // szukanie ruchu prowadzącego do najlepszego sąsiada
+    // i nienależącego do listy tabu, chyba że spełnia kryterium aspiracji
+    int searchNeighborhood(int &bestI, int &bestJ, vector<int> &currentRoute);
 
-    // obliczenie kosztu ścieżki
+    // obliczenie balansu po obróceniu ścieżki względem i oraz j
     int calculateAfterReverse(int i, int j, vector<int> &currentRoute);
 
 

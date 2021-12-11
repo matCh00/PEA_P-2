@@ -1,6 +1,6 @@
 /*
  * Algorytm symulowanego wyżarzania
- * Algorytm rozpoczyna działanie od temperatury początkowej. W trakcie działania, stopniowo obniżana jest temperatura.
+ * Algorytm rozpoczyna działanie od temperatury początkowej. W trakcie działania stopniowo obniżana jest temperatura.
  * Algorytm zaczyna od pewnego rozwiązania początkowego i w kolejnych iteracjach zamienia miejscami losowe elementy trasy.
  * Jeśli po zamianie, trasa jest lepsza – krótsza, zostaje ona zapisana jako dotychczasowo najlepsza, jeśli nie,
  * odrzucamy ją i wykonujemy zamianę elementów ponownie. Aby podczas tych zamian, algorytm nie utknął w minimum lokalnym,
