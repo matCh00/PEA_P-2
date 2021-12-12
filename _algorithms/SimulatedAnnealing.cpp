@@ -124,6 +124,7 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
     // zapasowa permutacja
     permutation2 = permutation1;
 
+    time_t check = 0;
 
     // wykonywanie przez określony czas lub do osiągnięcia minimalnej temperatury
     while (currentTemperature > minTemperature && timer.stop() < executionTime) {
@@ -166,10 +167,16 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
         }
 
         // beta
-        double beta = (maxTemperature - minTemperature) / (10000000 * maxTemperature * minTemperature);
+        double beta = (maxTemperature - minTemperature) / (100000000 * maxTemperature * minTemperature);
 
         // zmiana temperatury
         currentTemperature = (currentTemperature / (1 + beta * currentTemperature));
+
+        if (timer.stop() > check) {
+
+            cout << "po " << timer.stop() << "s: " << foundOptimum << endl;
+            check += 1;
+        }
     }
 
     // dodanie początkowego wierzchołka na koniec cyklu

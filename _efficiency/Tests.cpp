@@ -43,7 +43,7 @@ void Tests::SA() {
     // parametry SA
     vector<double> initTemp = {2500.0};
     vector<double> minTemp = {1.0008};
-    vector<time_t> timeSA = {10, 30, 60};
+    vector<time_t> timeSA = {5, 20};
 
 
     // SA
@@ -97,7 +97,7 @@ void Tests::TS() {
     // parametry TS
     vector<int> cadence = {120};
     vector<int> divCad = {9};
-    vector<time_t> timeTS = {10, 30, 60};
+    vector<time_t> timeTS = {5, 20};
 
 
     // TS

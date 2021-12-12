@@ -186,6 +186,7 @@ double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vecto
 
     int bestBalance, bestI = 0, bestJ = 0;
 
+    time_t check = 0;
 
     // wykonywanie przez określony czas
     while (timer.stop() < executionTime) {
@@ -238,6 +239,12 @@ double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vecto
 
             currentCadence /= divideCadence;
             intensification = false;
+        }
+
+        if (timer.stop() > check) {
+
+            cout << "po " << timer.stop() << "s: " << globalOptimum << endl;
+            check += 1;
         }
     }
 
