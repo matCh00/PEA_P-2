@@ -209,7 +209,7 @@ double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vecto
         // szukanie nowego lokalnego optimum
         currentOptimum = currentOptimum + bestBalance;
 
-        if (currentOptimum < globalOptimum) {
+        if (currentOptimum < globalOptimum && currentOptimum > 0) {
 
             // włączenie intensyfikacji
             intensification = true;
