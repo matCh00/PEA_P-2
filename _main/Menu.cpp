@@ -24,9 +24,9 @@ void Menu::startMenu() {
     // defaultowe ustawienia algorytmu
     maxTemp = 2600.0;
     minTemp = 1.0008;
-    timeSA = 5;
+    timeSA = 20;
     cadence = 120;
-    timeTS = 5;
+    timeTS = 20;
     divCadence = 9;
 
     // instancja grafu
