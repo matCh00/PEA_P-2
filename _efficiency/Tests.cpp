@@ -2,11 +2,12 @@
 
 
 ofstream file;
+ofstream file2;
 
 
 void Tests::startAutomaticTests() {
 
-    file.open("C:/Users/matic/Desktop/current projects/PEA_P-2/results.txt");
+    file.open("C:/Users/matic/Desktop/current projects/PEA_P-2/resultsSA.txt");
 
     if(!file.is_open()) {
 
@@ -14,9 +15,20 @@ void Tests::startAutomaticTests() {
     }
 
     SA();
-    //TS();
 
     file.close();
+
+
+    file2.open("C:/Users/matic/Desktop/current projects/PEA_P-2/resultsTS.txt");
+
+    if(!file2.is_open()) {
+
+        cout << "plik nie jest otwarty";
+    }
+
+    TS();
+
+    file2.close();
 }
 
 
@@ -40,13 +52,13 @@ void Tests::SA() {
     for (int num = 0; num < 3; num++) {
 
         if (num == 0)
-            graph = new Graph("C:/Users/matic/Desktop/br17.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/PEA/sourcesAsymmetricTSP/br17.atsp");
 
         if (num == 1)
-            graph = new Graph("C:/Users/matic/Desktop/ft70.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/PEA/sourcesAsymmetricTSP/ft70.atsp");
 
         if (num == 2)
-            graph = new Graph("C:/Users/matic/Desktop/ftv170.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/PEA/sourcesAsymmetricTSP/ftv170.atsp");
 
 
         path.resize(graph->getSize() + 1);
@@ -94,13 +106,13 @@ void Tests::TS() {
     for (int num = 0; num < 3; num++) {
 
         if (num == 0)
-            graph = new Graph("C:/Users/matic/Desktop/br17.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/PEA/sourcesAsymmetricTSP/br17.atsp");
 
         if (num == 1)
-            graph = new Graph("C:/Users/matic/Desktop/ft70.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/PEA/sourcesAsymmetricTSP/ft70.atsp");
 
         if (num == 2)
-            graph = new Graph("C:/Users/matic/Desktop/ftv170.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/PEA/sourcesAsymmetricTSP/ftv170.atsp");
 
 
         path.resize(graph->getSize() + 1);
@@ -115,7 +127,7 @@ void Tests::TS() {
                     ts->settingsTabuSearch(cadence[i], divCad[j], timeTS[k]);
                     exeTime = ts->algorithmTabuSearch(graph->getMatrix(), path, cost);
 
-                    file << "TS:  rozmiar: " << graph->getSize() << " koszt: " << cost << " czas wykonania: " << exeTime <<
+                    file2 << "TS:  rozmiar: " << graph->getSize() << " koszt: " << cost << " czas wykonania: " << exeTime <<
                     "  kadencja: " << cadence[i] << "  div: " << divCad[k] << "  czas: " << timeTS[j] <<endl;
                 }
             }
