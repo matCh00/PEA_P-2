@@ -241,11 +241,13 @@ double TabuSearch::algorithmTabuSearch(vector<vector<int>> originalMatrix, vecto
             intensification = false;
         }
 
-        if (timer.stop() > check) {
+// pokazuje aktualny wynik co sekundę (dane do wykresów)
 
-            cout << "po " << timer.stop() << "s: " << globalOptimum << endl;
-            check += 1;
-        }
+//        if (timer.stop() > check) {
+//
+//            cout << "po " << timer.stop() << "s: " << globalOptimum << endl;
+//            check += 1;
+//        }
     }
 
     // zwolnienie pamięci

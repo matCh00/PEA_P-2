@@ -172,11 +172,13 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
         // zmiana temperatury
         currentTemperature = (currentTemperature / (1 + beta * currentTemperature));
 
-        if (timer.stop() > check) {
+// pokazuje aktualny wynik co sekundę (dane do wykresów)
 
-            cout << "po " << timer.stop() << "s: " << foundOptimum << endl;
-            check += 1;
-        }
+//        if (timer.stop() > check) {
+//
+//            cout << "po " << timer.stop() << "s: " << foundOptimum << endl;
+//            check += 1;
+//        }
     }
 
     // dodanie początkowego wierzchołka na koniec cyklu
