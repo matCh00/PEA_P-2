@@ -49,7 +49,7 @@ private:
     // losowanie kolejności miast
     void shufflePath(vector<int> &currentPath);
 
-    // prawdopodobienstwo wybrania sasiedniego miasta
+    // prawdopodobienstwo przyjęcia gorszego rozwiązania
     bool probability(int length1, int length2, double temperature);
 
 

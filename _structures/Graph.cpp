@@ -94,6 +94,12 @@ Graph::Graph(string filePath) {
                     exit(EXIT_FAILURE);
                 }
 
+                // jeżeli jest to przekątna
+                if (i == j) {
+
+                    item = 0;
+                }
+
                 // umieszczamy daną
                 row.push_back(item);
             }

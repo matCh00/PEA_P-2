@@ -23,7 +23,7 @@ void Menu::startMenu() {
 
     // defaultowe ustawienia algorytmu
     maxTemp = 2600.0;
-    minTemp = 1.00079;
+    minTemp = 1.0008;
     timeSA = 5;
     cadence = 120;
     timeTS = 5;
@@ -47,7 +47,7 @@ void Menu::startMenu() {
         switch (key) {
 
             case 1:
-                cout << "podaj nazwe pliku wraz z rozszerzeniem: ";      // C:\Users\matic\Desktop\br17.atsp  C:\Users\matic\Desktop\ftv170.atsp
+                cout << "podaj nazwe pliku wraz z rozszerzeniem: ";
                 cin >> name;
                 graph = new Graph(name);
                 break;

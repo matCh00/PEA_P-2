@@ -29,9 +29,9 @@ void Tests::SA() {
     double exeTime;
 
     // parametry SA
-    vector<double> initTemp = {10.0, 1000.0, 2500.0};
-    vector<double> minTemp = {0.001, 1.0, 1.0008, 1.005};
-    vector<time_t> timeSA = {3, 10};
+    vector<double> initTemp = {2500.0};
+    vector<double> minTemp = {1.0008};
+    vector<time_t> timeSA = {10, 30, 60};
 
 
     // SA
@@ -43,7 +43,7 @@ void Tests::SA() {
             graph = new Graph("C:/Users/matic/Desktop/br17.atsp");
 
         if (num == 1)
-            graph = new Graph("C:/Users/matic/Desktop/ftv64.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/ft70.atsp");
 
         if (num == 2)
             graph = new Graph("C:/Users/matic/Desktop/ftv170.atsp");
@@ -83,9 +83,9 @@ void Tests::TS() {
     double exeTime;
 
     // parametry TS
-    vector<int> cadence = {40, 120};
+    vector<int> cadence = {120};
     vector<int> divCad = {9};
-    vector<time_t> timeTS = {3};
+    vector<time_t> timeTS = {10, 30, 60};
 
 
     // TS
@@ -97,7 +97,7 @@ void Tests::TS() {
             graph = new Graph("C:/Users/matic/Desktop/br17.atsp");
 
         if (num == 1)
-            graph = new Graph("C:/Users/matic/Desktop/ftv64.atsp");
+            graph = new Graph("C:/Users/matic/Desktop/ft70.atsp");
 
         if (num == 2)
             graph = new Graph("C:/Users/matic/Desktop/ftv170.atsp");
