@@ -82,10 +82,8 @@ void SimulatedAnnealing::shufflePath(vector<int> &currentPath) {
 
 bool SimulatedAnnealing::probability(int length1, int length2, double temperature) {
 
-    double e = 2.718281828459;
-
     // prawdopodobieństwo
-    double p = pow(e, ((-1 * ((long long)length2 - (long long)length1)) / temperature));
+    double p = exp((-1 * ((long long)length2 - (long long)length1)) / temperature);
 
     // wybranie liczby z przedziału <0,1>
     double r = (double)rand() / RAND_MAX;
@@ -116,6 +114,9 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
 
     // zaczynamy od maksymalnej temperatury
     currentTemperature = maxTemperature;
+
+    // beta
+    double beta = (maxTemperature - minTemperature) / (100000000 * maxTemperature * minTemperature);
 
     // pierwsza permutacja miast i jej koszt
     shufflePath(permutation1);
@@ -165,9 +166,6 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
             permutation2[vertex1] = permutation1[vertex1];
             permutation2[vertex2] = permutation1[vertex2];
         }
-
-        // beta
-        double beta = (maxTemperature - minTemperature) / (100000000 * maxTemperature * minTemperature);
 
         // zmiana temperatury
         currentTemperature = (currentTemperature / (1 + beta * currentTemperature));
