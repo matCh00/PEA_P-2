@@ -116,7 +116,7 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
     currentTemperature = maxTemperature;
 
     // beta
-    double beta = (maxTemperature - minTemperature) / (100000000 * maxTemperature * minTemperature);
+    double beta = (maxTemperature - minTemperature) / (1000000 * maxTemperature * minTemperature);
 
     // pierwsza permutacja miast i jej koszt
     shufflePath(permutation1);
@@ -130,41 +130,45 @@ double SimulatedAnnealing::algorithmSimulatedAnnealing(vector<vector<int>> origi
     // wykonywanie przez określony czas lub do osiągnięcia minimalnej temperatury
     while (currentTemperature > minTemperature && timer.stop() < executionTime) {
 
-        do {
-            // losowanie 2 miast (różnych i nierównych 0)
-            vertex1 = rand() % matrixSize;
-            vertex2 = rand() % matrixSize;
+        // epoka: liczba kroków, po której zmniejszana jest temperatura
+        for (int era = 0; era < 100; ++era) {
 
-        } while (vertex1 == vertex2 || vertex1 == 0 || vertex2 == 0);
+            do {
+                // losowanie 2 miast (różnych i nierównych 0)
+                vertex1 = rand() % matrixSize;
+                vertex2 = rand() % matrixSize;
 
-        // zamiana miast
-        permutation2[vertex2] = permutation1[vertex1];
-        permutation2[vertex1] = permutation1[vertex2];
+            } while (vertex1 == vertex2 || vertex1 == 0 || vertex2 == 0);
 
-        // koszt nowej permutacji miast
-        cost2 = calculateCost(permutation2);
+            // zamiana miast
+            permutation2[vertex2] = permutation1[vertex1];
+            permutation2[vertex1] = permutation1[vertex2];
 
-        // jeżeli jest lepszy od poprzedniej lub prawdopodobieństwo == true
-        if (cost2 <= cost1 || probability(cost1, cost2, currentTemperature)) {
+            // koszt nowej permutacji miast
+            cost2 = calculateCost(permutation2);
 
-            // nowe minimum lokalne
-            cost1 = cost2;
+            // jeżeli jest lepszy od poprzedniej lub prawdopodobieństwo == true
+            if (cost2 <= cost1 || probability(cost1, cost2, currentTemperature)) {
 
-            // jeżeli jest mniejsze od minimum globalnego
-            if (cost1 <= foundOptimum) {
+                // nowe minimum lokalne
+                cost1 = cost2;
 
-                foundOptimum = cost1;
-                path = permutation2;
+                // jeżeli jest mniejsze od minimum globalnego
+                if (cost1 <= foundOptimum) {
+
+                    foundOptimum = cost1;
+                    path = permutation2;
+                }
+
+                // przepisanie lepszej permutacji
+                permutation1[vertex1] = permutation2[vertex1];
+                permutation1[vertex2] = permutation2[vertex2];
             }
-
-            // przepisanie lepszej permutacji
-            permutation1[vertex1] = permutation2[vertex1];
-            permutation1[vertex2] = permutation2[vertex2];
-        }
-        else {
-            // przepisanie aktualnej permutacji
-            permutation2[vertex1] = permutation1[vertex1];
-            permutation2[vertex2] = permutation1[vertex2];
+            else {
+                // przepisanie aktualnej permutacji
+                permutation2[vertex1] = permutation1[vertex1];
+                permutation2[vertex2] = permutation1[vertex2];
+            }
         }
 
         // zmiana temperatury
